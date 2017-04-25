@@ -1,0 +1,174 @@
+﻿@model IEnumerable<AppModel.Stage>
+
+@foreach (var s in Model)
+{
+    @*<h4>@Messages.Stage @s.Number</h4>*@
+
+var seasonId = ViewBag.SeasonId;
+
+var idStageKey = "#stage" + s.StageId;
+var idSettingeKey = "#setting" + s.StageId;
+var idStage = "stage" + s.StageId;
+var idSettinge = "setting" + s.StageId;
+    <ul class="nav nav-tabs" id="stage_tabs" role="tablist">
+        <li class="active"><a href=@idStageKey data-toggle="tab">@Messages.Stage @s.Number</a></li>
+        <li><a href=@idSettingeKey data-toggle="tab">@Messages.GameSettings</a></li>
+    </ul>
+
+    <div class="tab-content row offset-3">
+        <div class="tab-pane fade col-xs-12" id=@idSettinge>
+            @Html.Action("Edit", "Games", new { idLeague = s.LeagueId, idStage = s.StageId })
+        </div>
+        <div class="tab-pane fade in active col-sm-12" id=@idStage>
+            @{
+                var groups = s.Groups.Where(t => t.IsArchive == false);
+            }
+            @foreach (var g in groups)
+            {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>@Messages.GroupName</th>
+                            <th>@Messages.GameType</th>
+                            <th>@Messages.TeamsNum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@g.Name</td>
+                            <td>@LangHelper.GetGameType(g.GamesType.Name)</td>
+
+                            @if (g.IsAdvanced && g.GroupsTeams.Count == 0)
+                            {
+                                <td>@(g.PlayoffBrackets.Count * 2)</td>
+                            }
+                            else
+                            {
+                                <td>@g.GroupsTeams.Count</td>
+                            }
+                            @if (!g.IsAdvanced)
+                            {
+                                <td width="75">
+                                    <a href="@Url.Action("Edit", "Groups", new { id = g.GroupId})"
+                                       data-target="#groupsedit"
+                                       data-toggle="modal"
+                                       class="btn btn-primary">@Messages.Edit</a>
+                                </td>
+                            }
+                            <td width="75">
+                                <a href="@Url.Action("Delete", "Groups", new { id = g.GroupId, seasonId = @seasonId })" class="@AppCss.Delete"
+                                   data-ajax-confirm="@Messages.DeleteConfirm"
+                                   data-ajax-update="#groupslist"
+                                   data-ajax="true"></a>
+                            </td>
+                        </tr>
+
+                        @if (g.PlayoffBrackets.Count > 0)
+                        {
+                            foreach (var brackets in g.PlayoffBrackets.GroupBy(t => new { t.MinPos, t.MaxPos }).OrderBy(b => b.Key.MaxPos))
+                            {
+                                <tr>
+                                    <td colspan="5"><h4>@Messages.Places @brackets.Key.MinPos - @brackets.Key.MaxPos</h4></td>
+                                </tr>
+                                var list = new List<string>();
+                                foreach (var bracket in brackets.Reverse())
+                                {
+                                    if (bracket.FirstTeam != null)
+                                    {
+                                        var firstTeam = bracket.FirstTeam.TeamsDetails.FirstOrDefault(x => x.SeasonId == seasonId);
+                                        if (firstTeam != null)
+                                        {
+                                            list.Insert(0, firstTeam.TeamName);
+                                        }
+                                        else
+                                        {
+                                            list.Insert(0, bracket.FirstTeam.Title);
+                                        }
+                                    }
+                                    else if (bracket.Type == (int)AppModel.PlayoffBracketType.Winner)
+                                    {
+                                        list.Insert(0, Messages.Winner);
+                                    }
+                                    else
+                                    {
+                                        list.Insert(0, Messages.Loser);
+                                    }
+
+                                    if (bracket.SecondTeam != null)
+                                    {
+                                        var secondTeam = bracket.SecondTeam.TeamsDetails.FirstOrDefault(x => x.SeasonId == seasonId);
+                                        if (secondTeam != null)
+                                        {
+                                            list.Add(secondTeam.TeamName);
+                                        }
+                                        else
+                                        {
+                                            list.Insert(0, bracket.SecondTeam.Title);
+                                        }
+                                    }
+                                    else if (bracket.Type == (int)AppModel.PlayoffBracketType.Winner)
+                                    {
+                                        list.Add(Messages.Winner);
+                                    }
+                                    else
+                                    {
+                                        list.Add(Messages.Loser);
+                                    }
+                                }
+
+                                foreach (var str in list)
+                                {
+                                    <tr>
+                                        <td colspan="5">@str</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var gt in g.GroupsTeams.OrderBy(gt => gt.Pos))
+                            {
+                                <tr>
+                                    @{
+                                        var team = gt.Team.TeamsDetails.FirstOrDefault(x => x.SeasonId == seasonId);
+                                    }
+                                    @if (team != null)
+                                    {
+                                        <td colspan="5">@team.TeamName</td>
+                                    }
+                                    else
+                                    {
+                                        <td colspan="5">@gt.Team.Title</td>
+                                    }
+                                </tr>
+                                            }
+                                        }
+                    </tbody>
+                </table>
+                <div>&nbsp;</div>
+                                        if (g == groups.LastOrDefault() && s == Model.LastOrDefault() && s != null && s.Groups != null && s.Groups.Count > 0 && g != null)
+                                        {
+                                            var confirmMsg = string.Format(@Messages.ConfirmNewGamesTable, s.Number.ToString());
+                                            <div class="row offset-2">
+                                                <div class="col-sm-6">
+                                                    <a href="@Url.Action("Create", "Schedules", new { id = s.LeagueId, seasonId = s.League.SeasonId })" id="createschdulelink"
+                                                       class="btn btn-info"
+                                                       data-ajax-confirm="@confirmMsg"
+                                                       data-ajax-begin="this.style.visibility='hidden'"
+                                                       data-ajax-success="activateTab('schedules');this.style.visibility='visible'"
+                                                       data-ajax-failure="alert('@Messages.ErrorGamesTableCreation');this.style.visibility='visible'"
+                                                       data-ajax-update="#schedules"
+                                                       data-ajax="true">@Messages.CreateGamesTable</a>
+                                                </div>
+                                            </div>
+                                            }
+                                        }
+        </div>
+    </div>
+                                        }
+
+<script>
+    $(document).ready(function () {
+        cmn.initDateTimePickers();
+    });
+</script>

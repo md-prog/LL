@@ -1,0 +1,27 @@
+﻿@model NotificationsViewModel
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@Messages.Date</th>
+            <th>@Messages.Notifications</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.Notifications)
+        {
+            <tr>
+                <td>@m.SendDate</td>
+                <td>@m.Message</td>
+                <td>
+                    @Ajax.ActionLink(" ", "Delete", "Notifications",
+                        new { id = m.MsgId, entityId = Model.EntityId, logicalName = Model.RelevantEntityLogicalName },
+                        new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "notes_list", Confirm = Messages.DeleteConfirm },
+                        new { @class = AppCss.Delete })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

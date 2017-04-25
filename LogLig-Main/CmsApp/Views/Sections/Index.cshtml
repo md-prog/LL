@@ -1,0 +1,73 @@
+﻿@model IEnumerable<AppModel.Section>
+@{
+    int savedId = TempData["SavedId"] != null ? (int)TempData["SavedId"] : 0;
+}
+
+<div class="row">
+    <div class="col-lg-9">
+        <h3 class="sub-header">@Messages.Sections</h3>
+    </div>
+</div>
+
+@*<form class="form-inline filters" role="form">
+        <div class="form-group">
+            <label>@Messages.Language:</label>
+            @Html.DropDownList("LangId", null, Messages.Select, new { @class = "form-control combo" })
+        </div>
+    </form>*@
+
+<div class="row offset-2">
+    <div class="col-lg-5" id="sections_pl">
+        <table class="table table-bordered" id="sections_tbl">
+            <thead>
+            <tr>
+                <th>@Messages.SectionName</th>
+                @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors))
+                {
+                    <td width="60"></td>
+                    <th width="70"></th>
+                }
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var m in Model)
+            {
+                string frmid = "sectform" + m.SectionId;
+                if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors))
+                {
+                    <tr>
+                        <td>
+                            <form method="post" id="@frmid" action="@Url.Action("Update")">
+                                <span class="form-group">
+                                        <input type="text" name="Name" value="@m.Name" form="@frmid" class="form-control required" maxlength="40" />
+                                        @Html.ValidationMessage("Name")
+                                        <input type="hidden" name="SectionId" form="@frmid" value="@m.SectionId" />
+                                    </span>
+                            </form>
+                        </td>
+                        <td>
+                            <button class='@AppCss.Save @(savedId == m.SectionId ? "btn btn-success" : null)' form='@frmid'></button>
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href='@Url.Action("Edit", new {id = m.SectionId})'>@Messages.Edit</a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(m.Name, "Edit", new {id = m.SectionId})
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function() {
+        localStorage.setItem('lastTab', null);
+    });
+</script>

@@ -1,0 +1,125 @@
+﻿@model EditUnionForm
+@Html.HiddenFor(m => m.SeasonId)
+
+<div class="row">
+    <div class="col-lg-10">
+        <h3 class="sub-header">
+            @{
+                if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors))
+                {
+
+                    <a href="@Url.Action("Edit", "Sections", new {id = Model.SectionId})">@Model.SectionName</a>
+                }
+                else
+                {
+                    @Model.SectionName
+                }
+            }
+            &raquo; @Model.UnionName
+        </h3>
+    </div>
+    <div class="col-lg-2">
+        <div class="form-group" style="margin-top: 20px">
+            @Html.DropDownListFor(m => m.SeasonId, new SelectList(Model.Seasons, "Id", "Name"), new { @class = "form-control", @id = "ddlSeasons" })
+        </div>
+    </div>
+</div>
+
+<ul class="nav nav-tabs" id="section_tabs" role="tablist">
+    <li class="active"><a href="#details" data-toggle="tab">@Messages.Info</a></li>
+    <li><a href="#clubs" data-toggle="tab">@Messages.ClubsInSection</a></li>
+    <li><a href="#leagues" data-toggle="tab">@Messages.Leagues</a></li>
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <li><a href="#userstab" data-toggle="tab">@Messages.Workers</a></li>
+        <li><a href="#auditoriums" data-toggle="tab">@Messages.Auditoriums</a></li>
+        <li><a href="#schedules" data-toggle="tab">@Messages.GamesTable</a></li>
+    }
+    <li><a href="#eilatTournament" data-toggle="tab">
+        @if (Model.IsCatchBall)
+        {
+            @Messages.EilatTournament
+        }
+        else
+        {
+           @Messages.Tournaments
+        }
+        
+    </a></li>
+    <li><a href="#seasons" data-toggle="tab">@Messages.Seasons</a></li>
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <li><a href="#notifications" data-toggle="tab">@Messages.Notifications</a></li>
+    }
+</ul>
+
+<div id="groupmodal" class="tab-content row offset-3">
+
+    <div class="tab-pane fade in active col-sm-9" id="details">
+        @Html.Action("Details")
+    </div>
+    <div class="tab-pane fade col-sm-9" id="clubs">
+        @Html.Action("ListByUnion", "Clubs", new { id = Model.UnionId, seasonId = Model.SeasonId })
+    </div>
+
+    <div class="tab-pane fade  col-sm-9" id="leagues">
+        @Html.Action("Leagues", "Unions", new { id = Model.UnionId, seasonId = Model.SeasonId })
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="userstab">
+        <div id="workers_list">
+            @Html.Action("WorkerList", "Jobs", new { id = Model.UnionId, logicalName = LogicaName.Union, seasonId = Model.SeasonId})
+        </div>
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="auditoriums">
+        @Html.Action("List", "Auditoriums", new { unionId = Model.UnionId, seasonId = Model.SeasonId })
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="eilatTournament">
+        @Html.Action("EilatTournament", "Unions", new { unionId = Model.UnionId, seasonId = Model.SeasonId })
+    </div>
+
+    <div class="tab-pane fade" id="schedules">
+        @Html.Action("List", "Sections", new
+   {
+       model = new Schedules
+       {
+          UnionId = Model.UnionId
+       }, seasonId =  Model.SeasonId
+   })
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="seasons">
+        @Html.Action("List", "Seasons", new { entityId = Model.UnionId, logicalName = LogicaName.Union })
+    </div>
+
+    <div class="tab-pane fade" id="notifications">
+        @Html.Action("Add", "Notifications", new { entityId = Model.UnionId, logicalName = LogicaName.Union })
+    </div>
+</div>
+
+<div class="modal fade" id="newleague" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $('#ddlSeasons').change(function () {
+            var seasonId = $(this).val();
+            $.ajax({
+                url: '/Admin/SetUnionCurrentSeason',
+                type: 'POST',
+                dataType: 'JSON',
+                data: { seasonId },
+                success: function () {
+
+                }
+            });
+            window.location.href = '@Url.Action("Edit", new { id = Model.UnionId })?seasonId=' + seasonId;
+        });
+    </script>
+}

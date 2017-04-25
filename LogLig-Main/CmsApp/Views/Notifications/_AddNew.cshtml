@@ -1,0 +1,40 @@
+﻿@model NotificationsForm
+
+<div class="col-sm-6">
+    @if (!Model.NeedHideTextField)
+    {
+        <div class="row">
+            @using (Ajax.BeginForm("Add", "Notifications",
+                new AjaxOptions
+                {
+                    UpdateTargetId = "notes_list",
+                    OnComplete = "ClearInputField"
+                },
+                new { id = "noteform", autocomplete = "off" }))
+            {
+                <div class="form-group">
+                    <label class="control-label">@Messages.Message:</label>
+                    @Html.TextAreaFor(m => m.Message, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Message)
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary">@Messages.Send</button>
+                </div>
+                @Html.HiddenFor(m => m.SeasonId)
+                @Html.HiddenFor(m => m.EntityId)
+                @Html.HiddenFor(m => m.RelevantEntityLogicalName)
+            }
+        </div>
+     } 
+    <div class="row">
+        <div id="notes_list">
+            @Html.Action("List", new {entityId = Model.EntityId, logicalName = Model.RelevantEntityLogicalName})
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function ClearInputField() {
+        $('#Message').val('');
+    }
+</script>

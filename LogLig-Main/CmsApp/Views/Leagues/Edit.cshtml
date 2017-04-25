@@ -1,0 +1,119 @@
+﻿@model LeagueNavView
+
+@{ 
+    var updateRankCall = "";
+    if (Model.UnionId.HasValue)
+    {
+        updateRankCall = $"javascript:lgEdit.UpdateRank({Model.LeagueId}, {Model.SeasonId}, {Model.UnionId})";
+    }
+}
+
+<div class="row">
+    <div class="col-lg-10">
+        <h3 class="sub-header">
+            @if (Model.UnionId.HasValue)
+            {
+                if (Model.IsUnionValid)
+                {
+                    <a href="@Url.Action("Edit", "Unions", new {id = Model.UnionId})">@Model.UnionName</a>
+                }
+                else
+                {
+                    @Model.UnionName
+                }
+            }
+            @if (Model.UnionId.HasValue && Model.ClubId.HasValue)
+            {
+                @:&raquo;
+            }
+            @if (Model.ClubId.HasValue)
+            {
+                <a href="@Url.Action("Edit", "Clubs", new {id = Model.ClubId, sectionId = Model.SectionId})">@Model.ClubName</a>
+            }
+            &raquo; @Model.LeagueName
+        </h3>
+    </div>
+    <div class="col-lg-2">
+        <h3 class="currentSeason"></h3>
+    </div>
+</div>
+
+<ul class="nav nav-tabs" id="league_tabs" role="tablist">
+    <li class="active"><a href="#details" data-toggle="tab">@Messages.Info</a></li>
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <li><a href="#userstab" data-toggle="tab">@Messages.Workers</a></li>
+    }
+    <li><a href="#teams" data-toggle="tab">@Messages.Teams</a></li>
+    @*<li><a href="#settings" data-toggle="tab">@Messages.GameSettings</a></li>*@
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <li><a href="#groups" data-toggle="tab">@Messages.Groups</a></li>
+    }
+    <li><a href="#schedules" data-toggle="tab">@Messages.GamesTable</a></li>
+    @if (Model.UnionId.HasValue)
+    {
+        <li><a href="#leaguerank" data-toggle="tab" onclick="@updateRankCall">@Messages.LeagueTable</a></li>
+    }
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <li><a href="#notifications" data-toggle="tab">@Messages.Notifications</a></li>
+    }
+</ul>
+<div class="tab-content row offset-3">
+    <div class="tab-pane fade in active col-sm-10" id="details">
+        @Html.Action("Details")
+    </div>
+    <div class="tab-pane fade col-sm-7 offset-2" id="userstab">
+        <div id="workers_list">
+            @Html.Action("WorkerList", "Jobs", new { id = @Model.LeagueId, logicalName = LogicaName.League, seasonId = Model.SeasonId })
+        </div>
+    </div>
+
+    <div class="tab-pane fade col-sm-7" id="teams">
+        @Html.Action("List", "Teams", new { seasonId = Model.SeasonId, unionId = Model.UnionId })
+    </div>
+    @*<div class="tab-pane fade col-xs-10" id="settings">
+            @Html.Action("Edit", "Games")
+        </div>*@
+    <div class="tab-pane fade col-sm-7" id="groups">
+        @Html.Action("Groups", "Schedules", new {seasonId = Model.SeasonId})
+    </div>
+    <div class="tab-pane fade" id="schedules">
+        @Html.Action("List", "Schedules", new { isChronological = TempData["IsChrono"], desOrder = false, seasonid = Model.SeasonId })
+    </div>
+    @if (Model.UnionId.HasValue)
+    {
+        <div class="tab-pane fade" id="leaguerank">
+            <button class="btn btn-primary btn-edit"
+                    onclick="@updateRankCall">
+                <i class="glyphicon glyphicon-refresh"></i> @Messages.Update
+            </button>
+            @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+            {
+                <a href="@GlobVars.SiteUrl/LeagueTable/Index?id=@Model.LeagueId&seasonId=@Model.SeasonId&union=@Model.UnionId" target="_blank" class="btn btn-info">@Messages.ExternalLink</a>
+                if (Model.SectionAlias == GamesAlias.NetBall)
+                {
+                    <a href="#" id="extTblBtn" class="btn btn-info" onclick="$('.extendedTable').toggle()" style="margin-right:5px; margin-left:5px;">@Messages.ExtendedTable</a>
+                }
+            }
+            <div id="leagueranktable">
+                @Html.Action("Details", "LeagueRank", new { id = Model.LeagueId, seasonId = Model.SeasonId, unionId = Model.UnionId })
+            </div>
+        </div>
+
+    }
+    <div class="tab-pane fade" id="notifications">
+        @Html.Action("Add", "Notifications", new { entityId = Model.LeagueId, logicalName = LogicaName.League })
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="addsycle" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="addsycleform_pl"></div>
+    </div>
+</div>
+
+<script type="text/javascript" src="~/Scripts/pages/leagueEdit.js"></script>

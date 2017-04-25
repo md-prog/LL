@@ -1,0 +1,127 @@
+﻿@model AuditoriumForm
+@{
+    var savedId = TempData["SavedId"] != null ? (int)TempData["SavedId"] : 0;
+}
+<a href="#" id="arena_print" class="btn btn-info">
+    <i class="glyphicon glyphicon-print"></i>&nbsp @Messages.Print
+</a>
+<table class="table table-bordered offset-3">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th width="200">
+                @Messages.Name
+            </th>
+            <th width="300">
+                @Messages.Address
+            </th>
+            <th class="remove_print"></th>
+            <th class="remove_print"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.Auditoriums)
+        {
+            var frmid = "hallsform" + m.AuditoriumId;
+            <tr>
+                <td>@m.AuditoriumId</td>
+                @using (Ajax.BeginForm("Create", "Auditoriums", new AjaxOptions { UpdateTargetId = "auditoriums" }, new { id = frmid }))
+                {
+                    <td>
+                        <div class="form-group" style="margin-bottom:0px">
+                            <input type="text" name="Name" value="@m.Name" form="@frmid" class="form-control required" />
+                            @Html.ValidationMessage("Name")
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group" style="margin-bottom: 0px">
+                            <input type="text" name="Address" value="@m.Address" form="@frmid" class="txt-auditorium-adress form-control required" />
+                            @Html.ValidationMessage("Address")
+                        </div>
+                    </td>
+                    @Html.HiddenFor(x => x.UnionId, new { form = frmid })
+                    @Html.HiddenFor(x => x.SeasonId, new { form = frmid })
+                    @Html.HiddenFor(x => x.ClubId, new { form = frmid })
+                }
+                <td class="remove_print">
+                    <input type="hidden" name="AuditoriumId" form="@frmid" value="@m.AuditoriumId" />
+                    <button class="btn-save-record btn btn-primary btn-save glyphicon glyphicon-saved" form="@frmid"></button>
+                </td>
+                <td class="remove_print">
+                    <a href="@Url.Action("Delete", new { id = m.AuditoriumId })" class="@AppCss.Delete"
+                       data-ajax-confirm="@Messages.DeleteConfirm"
+                       data-ajax-update="#auditoriums"
+                       data-ajax="true"></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot class="remove_print">
+        @using (Ajax.BeginForm("Create", "Auditoriums", new AjaxOptions { UpdateTargetId = "auditoriums" }, new { id = "hallsform" }))
+        {
+            <tr>
+                <td>@Messages.AddNew</td>
+
+                <td>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", maxlength = 80, form = "hallsform" })
+                        @Html.ValidationMessageFor(m => m.Name)
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        @Html.TextBoxFor(m => m.Address, new { @class = "form-control", maxlength = 80, form = "hallsform" })
+                        @Html.ValidationMessageFor(m => m.Address)
+                    </div>
+                </td>
+                <td>
+                    <button class="btn btn-primary" form="hallsform">@Messages.Save</button>
+                </td>
+                <td>
+                    @Html.HiddenFor(m => m.AuditoriumId, new { form = "hallsform" })
+                    @Html.HiddenFor(m => m.UnionId, new { form = "hallsform" })
+                    @Html.HiddenFor(x => x.SeasonId, new { form = "hallsform" })
+                    @Html.HiddenFor(x => x.ClubId, new { form = "hallsform" })
+                </td>
+            </tr>
+        }
+    </tfoot>
+</table>
+
+<script>
+    $('#hallsform').validateBootstrap(true);
+    $('#arena_print').click(function () {
+        var tbl = $('div.active').find('table');
+        if (tbl.length > 0) {
+            arenaPrint(tbl);
+        }
+    });
+
+    function arenaPrint(el) {
+        var wnd = window.open('', 'Arena', 'height=600, width=600');
+        wnd.document.write('<html><head><title>Arena</title>');
+        wnd.document.write('<link rel="stylesheet" href="/content/css/style.css" type="text/css" media="print" />');
+        wnd.document.write('<link rel="stylesheet" href="/content/css/bootstrap.css" type="text/css" />');
+        wnd.document.write('<body>');
+
+        wnd.document.write($(el).prop('outerHTML'));
+        $(wnd.document).find('.remove_print').remove();
+        wnd.document.write('</body></html>');
+        wnd.document.close();
+        wnd.focus();
+        setTimeout(function () {
+            wnd.print();
+            wnd.close();
+        }, 200);
+    }
+
+    $(document).ready(function () {
+        $('.txt-auditorium-adress').on('keyup', function () {
+            var saveButton = $(this).parent().parent().parent().find('.btn-save-record');
+            $(saveButton).removeClass('btn-primary btn-save');
+            $(saveButton).addClass('btn-success');
+        });
+    });
+</script>
+
+

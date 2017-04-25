@@ -1,0 +1,101 @@
+﻿@model TeamPlayerForm
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+    <h4 class="modal-title">@Messages.AddNew</h4>
+</div>
+@using (Ajax.BeginForm("CreatePlayer", null,
+    new AjaxOptions
+    {
+        UpdateTargetId = "playereditform_pl"
+    },
+    new { id = "userplayerform", autocomplete = "off" }))
+{
+    <div id="editplayerformbody">
+        @Html.Partial("_EditPlayerFormBody", Model)
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">@Messages.Close</button>
+        <button type="submit" class="btn btn-primary">@Messages.Save</button>
+    </div>
+}
+<script>
+    $('#userplayerform').validateBootstrap(true); 
+
+    makeIdFieldAutoComplete();
+
+    function makeIdFieldAutoComplete(){
+
+        var searchUrl = '@Url.Action("Search", new { teamId = Model.TeamId })';
+
+        var items = new Bloodhound({
+            datumTokenizer: function (datum) {
+                return Bloodhound.tokenizers.whitespace(datum.Name);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: searchUrl,
+                prepare: function (query, sett) {
+                    sett.type = "POST";
+                    sett.contentType = "application/json; charset=UTF-8";
+                    sett.data = JSON.stringify({ term: query });
+                    return sett;
+                }
+            }
+        });
+
+        $('#userplayerform #IdentNum').typeahead({ hint: false, highlight: true,  minLength: 2 }, 
+            {
+                name: 'states',
+                display: 'Name',
+                limit: 200,
+                source: items,
+                templates: {
+                    suggestion: function (data) {
+                        return '<div>' + data.IdentNum + '<br />' + data.FullName + '</div>';
+                    }
+                }
+            });
+
+        $('#userplayerform #IdentNum').bind('typeahead:select', function (ev, data) {
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ExistingPlayer", "TeamPlayers")',
+                data: { IdentNum: data.IdentNum, TeamId: @Model.TeamId, SeasonId: $('#SeasonId').val() },
+                success: function(returnedData) {
+                    $('#editplayerformbody').html(returnedData);
+                    makeIdFieldAutoComplete();
+
+                    $("#userplayerform").valid();
+                    $('#userplayerform').validateBootstrap(true);
+
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status);
+                    alert(thrownError);
+                }
+            });
+        });
+    }
+</script>
+
+
+@if (TempData["Success"] != null)
+{
+    <script>
+        $('#playereditform').modal('hide');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Edit", "TeamPlayers")',
+            data: { id: @Model.TeamId, seasonId: @Model.SeasonId },
+            success: function (returnedData) {
+                $('#playersedit').html(returnedData);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+            }
+        });
+    </script>
+}

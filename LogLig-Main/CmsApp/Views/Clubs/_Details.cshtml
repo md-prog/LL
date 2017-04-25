@@ -1,0 +1,241 @@
+﻿@using AppModel
+@using CmsApp
+@model ClubDetailsForm
+
+<form id="detailsform" method="post" data-targetid="info" action="@Url.Action("Details")" autocomplete="off" enctype="multipart/form-data">
+
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label class="control-label">@Messages.ClubName:</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Name)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label class="control-label">@Messages.Logo:</label> (<span>2mb</span>)
+                <table>
+                    <tr>
+                        <td width="100px">
+                            @Html.Editor("LogoFile", "ImageUpload", new { css = "validfile" })
+                        </td>
+                        <td width="10px"></td>
+                        <td>
+                            <a class="btn btn-sm btn-danger"
+                               href="@Url.Action("DeleteImage", new {unionId = Model.ClubId, image = "Logo"})"
+                               title="@Messages.Delete">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                @Html.ValidationMessage("LogoFile")
+                @if (!string.IsNullOrEmpty(Model.Logo))
+                {
+                    <div class="offset-2"></div>
+                    @ShowImage(Model.Logo)
+                }
+            </div>
+
+            <div class="col-sm-3 form-group">
+                <label class="control-label">@Messages.Image:</label> (<span>2mb</span>)
+                <table>
+                    <tr>
+                        <td width="100px">
+                            @Html.Editor("ImageFile", "ImageUpload", new { css = "validfile" })
+                        </td>
+                        <td width="10px"></td>
+                        <td>
+                            <a class="btn btn-sm btn-danger"
+                               href="@Url.Action("DeleteImage", new {unionId = Model.ClubId, image = "Image"})"
+                               title="@Messages.Delete">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                @Html.ValidationMessage("ImageFile")
+                @if (!string.IsNullOrEmpty(Model.PrimaryImage))
+                {
+                    <div class="offset-2"></div>
+                    @ShowImage(Model.PrimaryImage)
+                }
+            </div>
+
+            <div class="col-sm-3 form-group">
+                <label class="control-label">Index:</label> (<span>2mb</span>)
+                <table>
+                    <tr>
+                        <td width="100px">
+                            @Html.Editor("IndexFile", "ImageUpload", new { css = "validfile" })
+                        </td>
+                        <td width="10px"></td>
+                        <td>
+                            <a class="btn btn-sm btn-danger"
+                               href="@Url.Action("DeleteImage", new {unionId = Model.ClubId, image = "IndexImage"})"
+                               title="@Messages.Delete">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+                @if (!string.IsNullOrEmpty(Model.IndexImage))
+                {
+                    <div class="offset-2"></div>
+                    @ShowImage(Model.IndexImage)
+                }
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success">0%</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label class="control-label">@Messages.NGO_Number:</label>
+                @Html.TextBoxFor(m => m.NGO_Number, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.NGO_Number)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label class="control-label">@Messages.NameSportCenter:</label>
+                @Html.DropDownListFor(m => m.SportCenterId, new SelectList(Model.SportCenterList, nameof(SportCenter.Id),
+                Model.Culture == CultEnum.Heb_IL ? nameof(SportCenter.Heb) : nameof(SportCenter.Eng)),
+                Messages.Select, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label class="control-label">@Messages.Address:</label>
+                @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Address)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label class="control-label">@Messages.Phone:</label>
+                @Html.TextBoxFor(m => m.ContactPhone, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ContactPhone)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                <label class="control-label">@Messages.Email:</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label class="control-label">@Messages.ClubTermsCondition:</label>
+                @Html.TextBoxFor(m => m.TermsCondition, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.TermsCondition)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label class="control-label">@Messages.ClubDescription:</label>
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Description)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label class="control-label">@Messages.ClubAbout:</label>
+                @Html.TextAreaFor(m => m.IndexAbout, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.IndexAbout)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                @if (TempData["Saved"] != null)
+                {
+                    <span class="text-success">@Messages.DataSavedSuccess</span>
+                }
+            </div>
+            <div class="col-sm-2 text-align">
+                <button class="btn btn-primary">@Messages.Save</button>
+            </div>
+        </div>
+    }
+    else
+    {
+
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <h3>@Html.DisplayFor(m => m.Name)</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                @Html.DisplayFor(m => m.Description)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                @if (!string.IsNullOrEmpty(Model.Logo))
+                {
+                    <div class="offset-2"></div>
+                    @ShowImage(Model.Logo)
+                }
+            </div>
+            <div class="col-sm-3 form-group">
+                @if (!string.IsNullOrEmpty(Model.PrimaryImage))
+                {
+                    <div class="offset-2"></div>
+                    @ShowImage(Model.PrimaryImage)
+                }
+            </div>
+            <div class="col-sm-3 form-group">
+                @if (!string.IsNullOrEmpty(Model.IndexImage))
+                {
+                    <div class="offset-2"></div>
+                    @ShowImage(Model.IndexImage)
+                }
+                @Html.DisplayFor(m => m.IndexAbout)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                @Html.DisplayFor(m => m.ContactPhone)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                @Html.DisplayFor(m => m.Email)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                @Html.DisplayFor(m => m.Address)
+            </div>
+        </div>
+    }
+    @Html.HiddenFor(m => m.ClubId)
+</form>
+
+
+
+@helper ShowImage(string imgName)
+{
+    <img class="img-responsive img-thumbnail" src="@(GlobVars.ClubContentPath + imgName)" />
+}
+
+<script>
+    $('#detailsform').validateBootstrap(true);
+    setFileUpload('#detailsform', '#details');
+</script>
+
+

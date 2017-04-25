@@ -1,0 +1,85 @@
+﻿@model MovePlayerForm
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+    <h4 class="modal-title">@Messages.Move</h4>
+</div>
+
+@using (Ajax.BeginForm("MovePlayerToTeam", "TeamPlayers", null, new AjaxOptions
+{
+    UpdateTargetId = "playersedit",
+    OnSuccess = "successEdit",
+    
+},
+                                        new { id = "moveplayerform", autocomplete = "off" }))
+{
+    @Html.HiddenFor(x=>x.CurrentTeamId)
+    @Html.HiddenFor(x=>x.CurrentLeagueId)
+    @Html.HiddenFor(x=>x.SeasonId);
+    <div id="playersToPost"></div>
+    <div id="moveplayerformbody">
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label for="rb-create-newTeam" class="control-label">@Messages.CreateNewTeam</label>
+                    <input type="radio" name="move-player" class="form-group" id="rb-create-newTeam"/>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label for="rb-show-existed" class="control-label">@Messages.SelectTeam</label>
+                    <input type="radio" name="move-player" class="form-group" id="rb-show-existed" checked/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <div id="newTeam-row" style="display: none">
+                        <input type="text" value="" placeholder="NewTeam" id="newTeam" class="form-control"/>
+                        <br/>
+                        <button type="button" data-url="@Url.Action("CreateTeam", new {leagueId = Model.CurrentLeagueId, seasonId = Model.SeasonId, clubId = Model.ClubId})" id="createTeam" class="btn btn-primary">@Messages.AddTeam</button>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <div id="existed-team-row">
+                        @Html.DropDownListFor(x => x.TeamId, new SelectList(Model.Teams, "TeamId", "Title"), Messages.Select, new {@class = "form-control"})
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">@Messages.Cancel</button>
+        <button type="submit" class="btn btn-primary">@Messages.Move</button>
+    </div>
+}
+<script>
+
+    $(document).on('change', '#moveplayerform :radio', function() {
+        var radio = $(this);
+        if (radio.attr('id') == 'rb-create-newTeam') {
+            $('#newTeam-row').show();
+            $('#existed-team-row').hide();
+        } else {
+            $('#newTeam-row').hide();
+            $('#newTeam').val('');
+            $('#existed-team-row').show();
+
+        }
+    });
+    $(document).on('click', '#createTeam', function() {
+        createTeam();
+    });
+    function successEdit() {
+        $('#playermoveform').modal('hide');
+    }
+
+    function createTeam() {
+        var teamModel = {
+            Title: $('#newTeam').val()
+        }
+        var url = $('#createTeam').data('url');
+        $.post(url, { model: teamModel }, function(result) {
+            $('select#TeamId').append($('<option value="' + result.TeamId + '"> ' + result.Title + ' </option>'));
+            $('select#TeamId').val(result.TeamId);
+            $('#rb-show-existed').click();
+        });
+    }
+</script>

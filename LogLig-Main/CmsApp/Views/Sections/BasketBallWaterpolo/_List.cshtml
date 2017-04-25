@@ -1,0 +1,536 @@
+﻿@using DataService.DTO
+@model Schedules
+@{
+    var savedId = TempData["SavedId"] != null ? (int)TempData["SavedId"] : 0;
+
+    TempData["IsChrono"] = false;
+
+    bool userIsEditor = User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers);
+    string publishVisible = userIsEditor ? "visible" : "hidden";
+
+    var seasonId = Model.SeasonId;
+}
+
+@using (Ajax.BeginForm("List", null, new AjaxOptions { UpdateTargetId = "schedules", OnSuccess = "checkLeague(data)" },
+                                                            new { id = "groupform", autocomplete = "off" }))
+{
+    <div class="row">
+        <div style="display: inline-block; vertical-align: middle; float: none">
+            @Html.HiddenFor(model => model.UnionId)
+            @Html.HiddenFor(model => model.SeasonId)
+            <table>
+                <tr>
+                    <td width="30" style="vertical-align: central"></td>
+                    <td style="vertical-align: central">
+                        @Messages.SortTime @Html.RadioButtonFor(m => m.Sort, 1)
+                    </td>
+                    <td width="50"></td>
+                    <td style="vertical-align: central">
+                        @Messages.SortArea @Html.RadioButtonFor(m => m.Sort, 2)
+                    </td>
+                    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+                    {
+
+
+                        <td style="vertical-align: top; padding-left: 5px">
+                            <a class="btn btn-info" style="margin-right: 10px;" href="#" onclick="$('#exportExcelForm1').submit();">
+                                <i href="#" class="glyphicon glyphicon-open"></i> @Messages.ExportToExcel
+                            </a>
+                        </td>
+                    }
+                    <td style="padding-left: 5px;">
+                        <a href="#" class="btn btn-info" onclick="$('#uploadFileBtn').click()">
+                            <i href="#" class="glyphicon glyphicon-open" style="transform: rotate(180deg)"></i> @Messages.ImportFromExcel
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    Html.RenderPartial("_ShedulesDateConditions", Model);
+    Html.RenderPartial("_LeagueArenaChoice", Model);
+}
+<table id="res_tbl" class="table table-bordered offset-2">
+    <thead>
+        <tr>
+            <th width="1%"><input type="checkbox" id="games-chbx" /></th>
+            <th width="13%">@Messages.League</th>
+            <th width="2%">@Messages.Status</th>
+            <th width="6%">@Messages.Group</th>
+            <th width="9%" style="min-width:160px">@Messages.StartDate</th>
+            <th width="9%">@Messages.Auditorium</th>
+            <th width="11%">@Messages.Referee</th>
+            <th width="17%" class="text-center">@Messages.HomeTeam</th>
+            <th width="1%"></th>
+            <th width="2%" class="remove_print">@Messages.Swap</th>
+            <th width="1%"></th>
+            <th width="17%" class="text-center">@Messages.GuestTeam</th>
+            <th width="11%"></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var m in Model.Games)
+        {
+            var auditoriums = new SelectList(Model.Auditoriums.Where(a => a.Id > 0), nameof(AuditoriumShort.Id), nameof(AuditoriumShort.Name), m.AuditoriumId);
+            var referees = new SelectList(Model.Referees, "UserId", "FullName", m.RefereeId);
+            var GoldenSet = m.GameSets.FirstOrDefault(s => s.IsGoldenSet == true);
+            var isWaitingDivision = m.GameStatus != GameStatus.Started && m.GameStatus != GameStatus.Ended && m.Group.TypeId == 1;
+            var @_checked = m.IsPublished ? "checked" : string.Empty;
+            <tr id="row@(m.CycleId)">
+                @using (Ajax.BeginForm("UpdateGame", null,
+            new AjaxOptions
+            {
+                OnSuccess = "gcList.cycleUpdated(data)",
+                OnFailure = "gcList.cycleUpdateError(data)"
+            },
+            new { id = "gamefrm" + m.CycleId }))
+                {
+                    <td class="remove_print">
+                        <input type="checkbox" class="game-chbx" value="@(m.CycleId)" @_checked />
+                    </td>
+                    <td>
+                        @m.LeagueName
+                    </td>
+                    <td>
+                        @if (m.GameStatus == GameStatus.Started)
+                        {
+                            <span class="label label-success">@Messages.Started</span>
+                        }
+                        else if (m.GameStatus == GameStatus.Ended)
+                        {
+                            <span class="label label-danger">@Messages.Ended</span>
+                        }
+                        else
+                        {
+                            <span class="label label-default">@Messages.Waiting</span>
+                        }
+                    </td>
+                    if (m.Group != null)
+                    {
+                        <td>@m.Group.Name</td>
+                    }
+                    else
+                    {
+                        <td class="text-center"></td>
+                    }
+                    <td style="position:relative">
+                        <input name="StartDate" class="form-control frm-date" type="text" value="@m.StartDate.ToString("dd/MM/yyyy HH:mm")" form="gamefrm@(m.CycleId)" />
+                    </td>
+                    <td>@Html.DropDownList("AuditoriumId", auditoriums, Messages.Select, new { @class = "form-control", @form = "gamefrm" + m.CycleId })</td>
+                    <td>@Html.DropDownList("RefereeId", referees, Messages.Select, new { @class = "form-control", @form = "gamefrm" + m.CycleId })</td>
+                    <td class="text-center">
+                        @if (@m.HomeTeam != null)
+                        {
+                            var homeTeamDetails = m.HomeTeam.TeamsDetails.FirstOrDefault(x => x.SeasonId == seasonId);
+                            var teamName = homeTeamDetails == null ? m.HomeTeam.Title : homeTeamDetails.TeamName;
+                            <label class="home-team-label">
+                                @if (isWaitingDivision && m.GroupeId > 0)
+                                { <a href="javascript:gcList.unlockHomeTeam(@m.CycleId)"><i class="fa fa-lock"></i></a>}
+                                <span class="home-team-text">@teamName</span>
+                            </label>
+                            if (isWaitingDivision && m.GroupeId > 0)
+                            {
+                                <span class="input-group home-team-drop-down" style="display: none">
+                                    <a href="javascript:gcList.lockHomeTeam(@m.CycleId)"><i class="fa fa-unlock"></i></a>
+                                    @Html.DropDownList("HomeTeamId",
+                                        new SelectList(Model.teamsByGroups[m.GroupeId ?? 0],
+                                            nameof(TeamShortDTO.TeamId), nameof(TeamShortDTO.Title), m.HomeTeam.TeamId),
+                                        //Messages.Select,
+                                        new
+                                        {
+                                            @class = "form-control home-team-id",
+                                            @form = "gamefrm" + m.CycleId,
+                                            @onchange = $"gcList.HomeTeamChanged({m.CycleId}, this.options[this.selectedIndex].innerText)"
+                                        })
+                                </span>
+                            }
+
+                            if (GoldenSet != null && GoldenSet.HomeTeamScore > GoldenSet.GuestTeamScore)
+                            {
+                                <span class="label label-warning">@Messages.GoldenSet</span>
+                            }
+
+                            if (m.TechnicalWinnnerId == m.HomeTeam.TeamId)
+                            {
+                                <span class="label label-success">@Messages.TechWin</span>
+                            }
+                        }
+                        else if (@m.PlayoffBracket != null)
+                        {
+                            if (m.PlayoffBracket.Type == (int)AppModel.PlayoffBracketType.Winner)
+                            {
+                                <a href="@Url.Action("PotentialTeams", "GameCycle", new { id = m.PlayoffBracket.Id, index = 1 })"
+                                   data-target="#barcket-potential-teams"
+                                   data-toggle="modal">@Messages.Winner</a>
+                            }
+                            else if (m.PlayoffBracket.Type == (int)AppModel.PlayoffBracketType.Loseer)
+                            {
+                                <a href="@Url.Action("PotentialTeams", "GameCycle", new { id = m.PlayoffBracket.Id, index = 1 })"
+                                   data-target="#barcket-potential-teams"
+                                   data-toggle="modal">@Messages.Loser</a>
+                            }
+                            else
+                            {
+                                @("--")
+                            }
+                        }
+                    </td>
+                    <td  class="home-team-score">
+                        @if (m.GuestTeam != null)
+                        {
+                            <text> @m.GameSets.Sum(x => x.HomeTeamScore)</text>
+                        }
+                        else
+                        {
+                            <text>0</text>
+                        }
+
+                    </td>
+                    <td class="remove_print">
+                        <a class="btn btn-sm btn-primary"
+                           href="javascript:gcList.sectionToggleTeams(@m.CycleId, @Model.UnionId, @Model.SeasonId)"
+                           @(m.HomeTeamId == null || m.GuestTeamId == null ? "disabled" : "")>
+                            <i href="#" class="glyphicon glyphicon-resize-horizontal"></i>
+                        </a>
+                    </td>
+                    <td class="guest-team-score">
+                        @if (m.HomeTeam != null)
+                        {
+                            <text> @m.GameSets.Sum(x => x.GuestTeamScore)</text>
+                        }
+                        else
+                        {
+                            <text>0</text>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (@m.GuestTeam != null)
+                        {
+                            var guestTeamDetails = m.GuestTeam.TeamsDetails.FirstOrDefault(x => x.SeasonId == seasonId);
+                            var teamName = guestTeamDetails == null ? m.GuestTeam.Title : guestTeamDetails.TeamName;
+                            <label class="guest-team-label">
+                                @if (isWaitingDivision && m.GroupeId > 0)
+                                { <a href="javascript:gcList.unlockGuestTeam(@m.CycleId)"><i class="fa fa-lock"></i></a>}
+                                <span class="guest-team-text">@teamName</span>
+                            </label>
+                            if (isWaitingDivision && m.GroupeId > 0)
+                            {
+                                <span class="input-group guest-team-drop-down" style="display: none">
+                                    <a href="javascript:gcList.lockGuestTeam(@m.CycleId)"><i class="fa fa-unlock"></i></a>
+                                    @Html.DropDownList("GuestTeamId",
+                                        new SelectList(Model.teamsByGroups[m.GroupeId ?? 0],
+                                            nameof(TeamShortDTO.TeamId), nameof(TeamShortDTO.Title), m.GuestTeam.TeamId),
+                                        //Messages.Select,
+                                        new
+                                        {
+                                            @class = "form-control guest-team-id",
+                                            @form = "gamefrm" + m.CycleId,
+                                            @onchange = $"gcList.GuestTeamChanged({m.CycleId}, this.options[this.selectedIndex].innerText)"
+                                        })
+                                </span>
+                            }
+
+                            if (GoldenSet != null && GoldenSet.HomeTeamScore < GoldenSet.GuestTeamScore)
+                            {
+                                <span class="label label-warning">@Messages.GoldenSet</span>
+                            }
+                            if (m.TechnicalWinnnerId == m.GuestTeam.TeamId)
+                            {
+                                <span class="label label-success">@Messages.TechWin</span>
+                            }
+                        }
+                        else if (@m.PlayoffBracket != null)
+                        {
+                            if (m.PlayoffBracket.Type == (int)AppModel.PlayoffBracketType.Winner)
+                            {
+                                <a href="@Url.Action("PotentialTeams", "GameCycle", new { id = m.PlayoffBracket.Id, index = 2 })"
+                                   data-target="#barcket-potential-teams"
+                                   data-toggle="modal">@Messages.Winner</a>
+                            }
+                            else if (m.PlayoffBracket.Type == (int)AppModel.PlayoffBracketType.Loseer)
+                            {
+                                <a href="@Url.Action("PotentialTeams", "GameCycle", new { id = m.PlayoffBracket.Id, index = 2 })"
+                                   data-target="#barcket-potential-teams"
+                                   data-toggle="modal">@Messages.Loser</a>
+                            }
+                            else
+                            {
+                                @("--")
+                            }
+                        }
+                    </td>
+                    <td class="remove_print">
+                        <a class="btn btn-sm btn-danger"
+                           href="@Url.Action("Delete", new { id = m.CycleId, seasonId = Model.SeasonId })"
+                           data-ajax-confirm="@Messages.DeleteConfirm"
+                           data-ajax-update="#schedules"
+                           data-ajax="true"
+                           title="@Messages.Delete">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+
+
+                        <input name="CycleId" type="hidden" value="@m.CycleId" form="gamefrm@(m.CycleId)" />
+                        <a class="btn btn-sm btn-success"
+                           name="savebtn"
+                           disabled="disabled"
+                           onclick="gcList.SubmitGameForm(@m.CycleId)"
+                           title="@Messages.Save">
+                            <i class="glyphicon glyphicon-saved"></i>
+                        </a>
+
+                        @*@Html.ActionLink(Messages.ToGame, "Edit", "GameCycle", new { id = m.CycleId }, new { @class = "btn btn-sm btn-success" })*@
+
+                        @if (m.HomeTeamId != null && m.GuestTeamId != null)
+                        {
+                            <a class="btn btn-sm btn-primary"
+                               href="@Url.Action("Edit", "GameCycle", new { id = m.CycleId, global = true })"
+                               title="@Messages.ToGame">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-sm btn-primary"
+                               href="@Url.Action("Edit", "GameCycle", new { id = m.CycleId, global = true })"
+                               disabled="disabled"
+                               title="@Messages.ToGame">
+                                <i class="glyphicon glyphicon-pencil"></i>
+                            </a>
+                        }
+                    </td>
+                }
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript" src="~/Scripts/pages/gameCycleList.js"></script>
+
+<script>
+    $(function() {
+        initPublished();
+    });
+
+    function initPublished() {
+        var isPublished = $('#IsPublished').val();
+        var checkbox = $('#publish');
+        checkbox.prop('checked', isPublished === 'True');
+        checkbox.prop('indeterminate', isPublished === '');
+    }
+
+    function publish(unionId, seasonId) {
+        var checkbox = $('#publish');
+        var isPublished = checkbox.prop('checked');
+        var games = [];
+        $.each($('.game-chbx'), function(k, v) {
+            games.push($(v).val());
+        });
+        $.ajax({
+            url: '@Url.Action("Publish", "Sections")',
+            type: 'POST',
+            dataType: 'JSON',
+            data: { games: games, seasonId: seasonId, unionId: unionId, isPublished: isPublished },
+            success: function() {
+
+            }
+        });
+    }
+
+    $(".dropdown dt a").on('click', function() {
+        $(".dropdown dd ul").slideToggle('fast');
+    });
+
+    $(".dropdown dd ul li a").on('click', function() {
+        $(".dropdown dd ul").hide();
+    });
+
+    function leaguesOpen() {
+        $("#lgOpen").hide();
+        $("#leaguesList").show();
+        $("#lgClose").show();
+    }
+
+    function leaguesClose() {
+        $("#lgOpen").show();
+        $("#leaguesList").hide();
+        $("#lgClose").hide();
+    }
+
+    function auditoriumsOpen() {
+        $("#audOpen").hide();
+        $("#auditoriumsList").show();
+        $("#audClose").show();
+    }
+
+    function auditoriumsClose() {
+        $("#audOpen").show();
+        $("#auditoriumsList").hide();
+        $("#audClose").hide();
+    }
+
+    function getSelectedValue(id) {
+        var selected = $("#" + id).find("dt a span.value").html();
+        return selected;
+    }
+
+    $(document).bind('click', function(e) {
+        var $clicked = $(e.target);
+        if (!$clicked.parents().hasClass("dropdown")) $(".dropdown dd ul").hide();
+    });
+
+    $(function() {
+        cmn.initDateTimePickers();
+
+        $('#res_tbl tbody tr').each(function () {
+
+            var me = $(this);
+            var btn = $('[name=savebtn]', me);
+
+            $('select', me).change(function () {
+                btn.attr('disabled', false);
+            });
+
+            $('.frm-date', me).on('changedatetime.xdsoft', function (e) {
+                btn.attr('disabled', false);
+            });
+        });
+
+        $('.cyclemoveform tr').each(function() {
+            var me = $(this);
+            $('.frm-date', me).on('dp.change', function(e) {
+                $('button', me).attr('disabled', false);
+            });
+        });
+
+        $("#games-chbx").change(function() {
+            var self = $(this);
+            var items = $(".game-chbx");
+
+            if (self.is(':checked')) {
+                items.prop("checked", true);
+            } else {
+                items.prop("checked", false);
+            }
+
+        });
+
+        $("#exportExcelForm1").on("submit", function() {
+            var ids = [];
+            $("input[type=checkbox][class='game-chbx']:checked").each(function() {
+                ids.push(this.value);
+            });
+
+            if (ids.length == 0)
+                return false;
+
+            $("#gameIds1").val(ids.join(","));
+
+            return true;
+        });
+
+    });
+
+    function submitForm(formId) {
+        var form = $(formId);
+        var formCollection = form.serialize();
+        $.post('@Url.Action("Update")', formCollection, function(data) {
+            //alert('@Messages.DataSavedSuccess');
+        });
+    }
+
+    function checkLeague() {
+        var gamesCount = @Model.Games.Count;
+        if (gamesCount === 0) {
+            leaguesOpen();
+            auditoriumsOpen();
+            alert('@Messages.NoGamesFound');
+        }
+    }
+
+
+    function cycleUpdated(res) {
+        $('#row' + res.id).find('[name=savebtn]').attr('disabled', true);
+    }
+
+    $('#schedule_print').click(function() {
+        var tbl = $('div.tab-pane.active').find('table#res_tbl');
+        if (tbl.length > 0) {
+            schedulePrint(tbl);
+        }
+    });
+
+    function schedulePrint(element) {
+
+        var wnd = window.open('', 'Game schedules', 'height=600, width=600');
+        wnd.document.write('<html><head><title>Game schedules</title>');
+        //if need to add styles
+        wnd.document.write('<link rel="stylesheet" href="/content/css/style.css" type="text/css" media="print" />');
+        wnd.document.write('<link rel="stylesheet" href="/content/css/bootstrap.css" type="text/css" />');
+        wnd.document.write('<link rel="stylesheet" href="/content/css/print.css" type="text/css" />');
+
+        wnd.document.write('<body>');
+        wnd.document.write($(element).prop('outerHTML'));
+
+        $(wnd.document).find('.remove_print').remove();
+        $(wnd.document).find('hr:last').remove();
+        wnd.document.write('</body></html>');
+        wnd.document.close();
+        wnd.focus();
+        setTimeout(function() {
+            wnd.print();
+            //wnd.close();
+        }, 100);
+    };
+
+    function checkFileExtension(sender) {
+        var validExts = new Array(".xlsx", ".xls");
+        var file = $(sender.target).prop('files');
+        if (file.length > 0) {
+            var fileExt = file[0].name;
+            fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+            if (validExts.indexOf(fileExt) < 0) {
+                alert("Invalid file selected, valid files are of " +
+                    validExts.toString() + " types.");
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            alert('No file selected');
+            return false;
+        }
+
+    }
+    $(document).ready(function() {
+        $('#uploadFileBtn').change(function (event) {
+            var isValidExtension = checkFileExtension(event);
+            if (isValidExtension) {
+                $(this).closest('form').submit();
+
+            } else {
+                console.log('not valid extension');
+            }
+
+        });
+    })
+</script>
+
+<div class="modal fade" id="barcket-potential-teams" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+@using (Html.BeginForm("ExportToExcelUnion", "Schedules", new { leaguesId = Model.Leagues.Where(l => l.Id > 0 && l.Check).Select(l => l.Id).ToArray(), sortType = Model.Sort, seasonId = Model.SeasonId }, FormMethod.Post, new { id = "exportExcelForm1" }))
+{
+    @Html.Hidden("gameIds1")
+}
+
+@using (Html.BeginForm("ImportFromExcel", "Schedules", FormMethod.Post, new { id = "importExcelForm", enctype = "multipart/form-data" }))
+{
+    <input type="file" id="uploadFileBtn" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="importedExcel" style="display: none" />
+}

@@ -1,0 +1,517 @@
+﻿@using AppModel
+@using DataService.DTO
+@model Schedules
+@{
+    var gameIds = Session["GameIds"] != null ? (int[])Session["GameIds"] : new int[] { };
+
+    TempData["IsChrono"] = false;
+
+    bool userIsEditor = User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers);
+    string publishVisible = userIsEditor ? "visible" : "hidden";
+    int seasonId = Model.SeasonId;
+    var leagueId = Model.Leagues.First().Id;
+}
+
+<input id="leagueId" type="text" value="@leagueId" hidden />
+<input id="isChronological" type="text" value="false" hidden />
+
+@if (userIsEditor)
+{
+    <a href="@Url.Action("AddEvent", "Events", new { leagueId = leagueId})"
+        data-target="#addevent"
+        data-toggle="modal"
+        class="btn btn-primary btn-edit">
+        @Messages.AddEvent
+    </a>
+}
+
+<a href="javascript:gcList.SubmitScheduleCond(@leagueId, false)"
+    class="btn btn-primary btn-edit">
+    <i class="glyphicon glyphicon-refresh"></i> @Messages.Refresh
+</a>
+
+<a href='javascript:gcList.SubmitScheduleCond(@leagueId, true, @(((bool)Session["desOrder"]).ToString().ToLowerInvariant()))' 
+    class="btn btn-primary space-1">
+    @Messages.ShowGamesChronological
+</a>
+
+<a href='javascript:gcList.SubmitScheduleCond(@leagueId, false, @((!(bool)Session["desOrder"]).ToString().ToLowerInvariant()))'
+    class="btn btn-primary">
+    @Messages.ChangeOrderStages
+</a>
+
+
+@if (userIsEditor)
+{
+    <a class="btn btn-info" href="#" onclick="$('#exportExcelForm').submit();" data-toggle="tooltip" title="@Messages.TooltipExportToExcel">
+        <i href="#" class="glyphicon glyphicon-open"></i> @Messages.ExportToExcel
+        @using (Html.BeginForm("ExportToExcel", "Schedules", new { leagueId = leagueId, seasonId = Model.SeasonId }, FormMethod.Post, new { id = "exportExcelForm" }))
+        {
+            @Html.Hidden("gameIds")
+        }
+    </a>
+
+    <a href="#" class="btn btn-info" style="margin-right: 4px;" onclick="$('#uploadFileBtn').click()" data-toggle="tooltip" title="@Messages.TooltipImportFromExcel">
+        <i href="#" class="glyphicon glyphicon-open" style="transform: rotate(180deg)"></i> @Messages.ImportFromExcel
+    </a>
+
+    <a href="@GlobVars.SiteUrl/LeagueTable/Schedules/@leagueId?seasonId=@Model.SeasonId" target="_blank" class="btn btn-info" style="margin-right: 4px;">@Messages.ExternalLink</a>
+
+    <a href="#" id="publishAll" class="btn btn-primary"
+        data-toggle="tooltip" title="@Messages.TooltipPublishApp"
+        onclick="javascript:gcList.publishAllLeagueGamesCycles(@Model.SeasonId, @Model.Leagues.First().Id, $('input.gamePublish').not(':checked').length > 0)">
+        @Messages.SelectAll
+    </a>
+
+}
+
+
+
+@if (userIsEditor)
+{
+    using (Html.BeginForm("ImportFromExcel", "Schedules", FormMethod.Post, new { id = "importExcelForm", enctype = "multipart/form-data" }))
+    {
+        <input type="file" id="uploadFileBtn" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="importedExcel" style="display: none" />
+    }
+
+}
+
+@{
+    Html.RenderPartial("_ShedulesDateConditions", Model);
+    <div id="event_list">
+        @Html.Action("List", "Events", new { leagueId = leagueId, seasonId = Model.SeasonId })
+    </div>
+}
+
+@foreach (var stage in Model.Games.Where(gc => gc.Group.IsArchive == false).GroupBy(t => t.Stage))
+{
+    var groups = stage.Key.Groups.Where(g => g.IsArchive == false);
+    if (groups.Count() > 0 && groups.All(g => g.IsAdvanced))
+    {
+        var firstGroup = groups.FirstOrDefault();
+        if (firstGroup != null && firstGroup.PlayoffBrackets != null)
+        {
+            int numOfBrackets = firstGroup.PlayoffBrackets.Count;
+            switch (numOfBrackets)
+            {
+                case 1:
+                    <h3>@Messages.Final</h3>
+                    break;
+                case 2:
+                    <h3>@Messages.Semifinals</h3>
+                    break;
+                case 4:
+                    <h3>@Messages.Quarter_finals</h3>
+                    break;
+                case 8:
+                    <h3>@Messages.Final_Eighth</h3>
+                    break;
+                default:
+                    <h3>@(numOfBrackets * 2) @Messages.FinalNumber</h3>
+                    break;
+            }
+        }
+    }
+    else
+    {
+        var idOpen = stage.Key.StageId + "open";
+        var idClose = stage.Key.StageId + "close";
+        bool stagePublished = stage.SelectMany(s => s.Group.GamesCycles).All(gc => gc.IsPublished);
+        string isStageChecked = stagePublished ? "checked" : "";
+        <table>
+            <tr>
+                <td>
+                    <a href="javascript:gcList.stageOpen(@stage.Key.StageId)" id=@idOpen style="display:none">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </a>
+                    <a href="javascript:gcList.stageClose(@stage.Key.StageId)" id=@idClose>
+                        <i class="glyphicon glyphicon-minus"></i>
+                    </a>
+                </td>
+                <td>
+                    <h3>
+                        <input type="checkbox"
+                               id="stageItemsChbx_@stage.Key.StageId"
+                               class="stageItemsChbx"
+                               value="@(stage.Key.StageId)" @isStageChecked
+                               onclick="javascript: gcList.publishAllLeagueGamesCycles(@Model.SeasonId, @Model.Leagues.First().Id, $('input.gamePublish').not(':checked').length > 0)" />
+                        @Messages.Stage @(stage.Key.Number)
+                    </h3>
+                </td>
+            </tr>
+        </table>
+    }
+
+    <div id=@stage.Key.StageId>
+        @foreach (var games in stage.GroupBy(t => t.CycleNum))
+        {
+            <div class="row">
+                <div class="col-lg-9" style="display: inline-block; vertical-align: middle; float: none">
+                    @using (Ajax.BeginForm("MoveDate", null, new AjaxOptions { UpdateTargetId = "schedules" }, null))
+                    {
+                        <table class="cyclemoveform">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <h4>
+                                            @if (!(groups.Count() > 0 && groups.All(g => g.IsAdvanced)))
+                                            {
+                                                @Messages.Cycle
+                                                @(games.Key + 1)
+                                            }
+                                        </h4>
+                                    </td>
+                                    @if (userIsEditor)
+                                    {
+                                        <td>
+                                            <a class="btn btn-primary" 
+                                               href="@Url.Action("AddNew", new {stageId=stage.Key.StageId, num=games.Key})" 
+                                               data-target="#addsycle"
+                                               data-toggle="modal">@Messages.AddGame</a>
+                                        </td>
+                                        <td>
+                                            <div class="space-3"></div>
+                                        </td>
+                                        <td>
+                                            <div style="position: relative">
+                                                <input type="text" name="StartDate" value="@games.First().StartDate.ToString("dd/MM/yyyy HH:mm")" class="form-control frm-date required" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="space-2"></div>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="IsAll" value="True" /> @Messages.AllCycles
+                                        </td>
+                                        <td>
+                                            <div class="space-2"></div>
+                                        </td>
+                                            <td>
+                                                <button class="btn btn-primary" disabled>@Messages.MoveCycle</button>
+                                                <input type="hidden" name="StageId" value="@stage.Key.StageId" />
+                                                <input type="hidden" name="CycleNum" value="@games.Key" />
+                                            </td>
+                                    }
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                </div>
+                <!--
+                -->
+                <div class="col-lg-3" style="display: inline-block; vertical-align: middle; float: none">
+                    <div class="pull-right" style="visibility: @publishVisible">
+                        @Messages.IsPublished
+                        @{
+                            string gameCylesGroupNumAndStage = "publish_" + stage.Key.StageId + '_' + games.Key;
+                            bool published = games.All(g => g.IsPublished);
+                            string isChecked = published ? "checked" : "";
+                        }
+                        <input id=@gameCylesGroupNumAndStage type="checkbox"
+                               class="gamePublish" @isChecked
+                               onclick="gcList.publishGamesCyclesByCycleNumber(@Model.SeasonId, @leagueId, @stage.Key.StageId, @games.Key)" />
+                    </div>
+                </div>
+            </div>
+            <div class="prt_div">
+                <table id="res_tbl" class="table table-bordered offset-2 @gameCylesGroupNumAndStage">
+                    <thead>
+                        <tr>
+                            <th width="1%"></th>
+                            <th width="2%">@Messages.Status</th>
+                            <th width="7%">@Messages.Group</th>
+                            <th width="10%" style="min-width: 160px">@Messages.StartDate</th>
+                            <th width="13%">@Messages.Auditorium</th>
+                            <th width="15%">@Messages.Referee</th>
+                            <th width="18%" class="text-center">@Messages.HomeTeam</th>
+                            <th width="1%"></th>
+                            @if (userIsEditor)
+                            {
+                                <th class="remove_print" width="2%">@Messages.Swap</th>
+                            }
+                            <th width="1%"></th>
+                            <th width="18%" class="text-center">@Messages.GuestTeam</th>
+                            @if (userIsEditor)
+                            {
+                                <th class="remove_print" width="11%"></th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var m in games.OrderBy(gm => gm.StartDate).ThenBy(gm => gm.CycleId))
+                        {
+                            var auditoriums = new SelectList(Model.Auditoriums, nameof(AuditoriumShort.Id), nameof(AuditoriumShort.Name), m.AuditoriumId);
+                            var referees = new SelectList(Model.Referees, nameof(AppModel.User.UserId), nameof(AppModel.User.FullName), m.RefereeId);
+                            var GoldenSet = m.GameSets.FirstOrDefault(s => s.IsGoldenSet == true);
+                            var isWaitingDivision = m.GameStatus != GameStatus.Started && m.GameStatus != GameStatus.Ended && m.Group.TypeId == 1;
+                            var @_checked = m.IsPublished ? "checked" : string.Empty;
+
+                            <tr id="row@(m.CycleId)">
+                                <td class="remove_print">
+                                    <input type="checkbox" id="gameCycleItemChbx_@m.CycleId"
+                                           class="gameCycleItemChbx" name="gameCycleItemsChbx" value="@(m.CycleId)" @_checked
+                                           onclick="gcList.publishGamesCycle(@stage.Key.StageId, @games.Key, @m.CycleId)" />
+                                </td>
+                                @using (Ajax.BeginForm("Update", null,
+                    new AjaxOptions
+                    {
+                        OnSuccess = "gcList.cycleUpdated(data)",
+                        OnFailure = "gcList.cycleUpdateError(data)"
+                    },
+                    new { id = "gamefrm" + m.CycleId }))
+                                {
+                                    <td>
+                                        @if (m.GameStatus == GameStatus.Started)
+                            {
+                                            <span class="label label-success">@Messages.Started</span>
+                                        }
+                                        else if (m.GameStatus == GameStatus.Ended)
+                                        {
+                                            <span class="label label-danger">@Messages.Ended</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-default">@Messages.Waiting</span>
+                                        }
+                                    </td>
+                                    if (m.Group != null)
+                                    {
+                                        <td>@m.Group.Name</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center"></td>
+                                    }
+                                    if (userIsEditor)
+                                    {
+                                        <td style="position: relative">
+                                            <input name="StartDate" class="form-control frm-date" type="text" value="@m.StartDate.ToString("dd/MM/yyyy HH:mm")" form="gamefrm@(m.CycleId)" />
+                                        </td>
+                                        <td>@Html.DropDownList("AuditoriumId", auditoriums, Messages.Select, new { @class = "form-control", @form = "gamefrm" + m.CycleId })</td>
+                                        <td>@Html.DropDownList("RefereeId", referees, Messages.Select, new { @class = "form-control", @form = "gamefrm" + m.CycleId })</td>
+                                    }
+                                    else
+                                    {
+                                        <td style="position: relative">
+                                            @m.StartDate
+                                        </td>
+                                        <td>@(m.AuditoriumId.HasValue ? m.Auditorium.Name : "")</td>
+                                        <td>@(m.RefereeId.HasValue ? m.User.FullName : "")</td>
+
+                                    }
+
+
+                                    <td class="text-center">
+                                        @if (@m.HomeTeam != null)
+                                        {
+                                            var homeTeamDetails = m.HomeTeam.TeamsDetails.FirstOrDefault(x => x.SeasonId == seasonId);
+                                            var teamName = homeTeamDetails == null ? m.HomeTeam.Title : homeTeamDetails.TeamName;
+                                            <label class="home-team-label">
+                                                @if (isWaitingDivision && m.GroupeId > 0)
+                                                { <a href="javascript:gcList.unlockHomeTeam(@m.CycleId)"><i class="fa fa-lock"></i></a>}
+                                                <span class="home-team-text">@teamName</span>
+                                            </label>
+                                            if (isWaitingDivision && m.GroupeId > 0)
+                                            {
+                                                <span class="input-group home-team-drop-down" style="display: none">
+                                                    <a href="javascript:gcList.lockHomeTeam(@m.CycleId)"><i class="fa fa-unlock"></i></a>
+                                                    @Html.DropDownList("HomeTeamId",
+                                                        new SelectList(Model.teamsByGroups[m.GroupeId ?? 0],
+                                                            nameof(TeamShortDTO.TeamId), nameof(TeamShortDTO.Title), m.HomeTeam.TeamId),
+                                                        //Messages.Select,
+                                                        new
+                                                        {
+                                                            @class = "form-control home-team-id",
+                                                            @form = "gamefrm" + m.CycleId,
+                                                            @onchange = $"gcList.HomeTeamChanged({m.CycleId}, this.options[this.selectedIndex].innerText)"
+                                                        })
+                                                </span>
+                                            }
+
+                                            if (GoldenSet != null && GoldenSet.HomeTeamScore > GoldenSet.GuestTeamScore)
+                                            {
+                                                <span class="label label-warning">@Messages.GoldenSet</span>
+                                            }
+
+                                            if (m.TechnicalWinnnerId == m.HomeTeam.TeamId)
+                                            {
+                                                <span class="label label-success">@Messages.TechWin</span>
+                                            }
+                                        }
+                                        else if (@m.PlayoffBracket != null)
+                                        {
+                                            if (m.PlayoffBracket.Type == (int)AppModel.PlayoffBracketType.Winner)
+                                            {
+                                                <a href="@Url.Action("PotentialTeams", "GameCycle" , new {id=m.PlayoffBracket.Id, index=1})"
+                                                   data-target="#barcket-potential-teams"
+                                                   data-toggle="modal">@Messages.Winner</a>
+                                            }
+                                            else if (m.PlayoffBracket.Type == (int)AppModel.PlayoffBracketType.Loseer)
+                                            {
+                                                <a href="@Url.Action("PotentialTeams", "GameCycle" , new {id=m.PlayoffBracket.Id, index=1})"
+                                                   data-target="#barcket-potential-teams"
+                                                   data-toggle="modal">@Messages.Loser</a>
+                                            }
+                                            else
+                                            {
+                                                @("--")
+                                            }
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @m.HomeTeamScore
+                                    </td>
+                                    if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+                                    {
+                                        <td class="remove_print">
+                                            @if (m.HomeTeamId != null && m.GuestTeamId != null)
+                                            {
+                                                <a class="btn btn-sm btn-primary" href="@Url.Action("Toggle", new {id=m.CycleId})"
+                                                   data-ajax-update="#schedules"
+                                                   data-ajax="true">
+                                                    <i href="#" class="glyphicon glyphicon-resize-horizontal"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-sm btn-primary" href="@Url.Action("Toggle", new {id=m.CycleId})"
+                                                   data-ajax-update="#schedules"
+                                                   disabled="disabled"
+                                                   data-ajax="true">
+                                                    <i href="#" class="glyphicon glyphicon-resize-horizontal"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                    }
+                                    <td class="text-center">
+                                        @m.GuestTeamScore
+                                    </td>
+                                    <td class="text-center">
+
+                                        @if (@m.GuestTeam != null)
+                                        {
+                                            var guestTeamDetails = m.GuestTeam.TeamsDetails.FirstOrDefault(x => x.SeasonId == seasonId);
+                                            var teamName = guestTeamDetails == null ? m.GuestTeam.Title : guestTeamDetails.TeamName;
+                                            <label class="guest-team-label">
+                                                @if (isWaitingDivision && m.GroupeId > 0)
+                                                { <a href="javascript:gcList.unlockGuestTeam(@m.CycleId)"><i class="fa fa-lock"></i></a>}
+                                                <span class="guest-team-text">@teamName</span>
+                                            </label>
+                                            if (isWaitingDivision && m.GroupeId > 0)
+                                            {
+                                                <span class="input-group guest-team-drop-down" style="display: none">
+                                                    <a href="javascript:gcList.lockGuestTeam(@m.CycleId)"><i class="fa fa-unlock"></i></a>
+                                                    @Html.DropDownList("GuestTeamId",
+                                                        new SelectList(Model.teamsByGroups[m.GroupeId ?? 0],
+                                                            nameof(TeamShortDTO.TeamId), nameof(TeamShortDTO.Title), m.GuestTeam.TeamId),
+                                                        //Messages.Select,
+                                                        new
+                                                        {
+                                                            @class = "form-control guest-team-id",
+                                                            @form = "gamefrm" + m.CycleId,
+                                                            @onchange = $"gcList.GuestTeamChanged({m.CycleId}, this.options[this.selectedIndex].innerText)"
+                                                        })
+                                                </span>
+                                            }
+
+                                            if (GoldenSet != null && GoldenSet.HomeTeamScore < GoldenSet.GuestTeamScore)
+                                            {
+                                                <span class="label label-warning">@Messages.GoldenSet</span>
+                                            }
+                                            if (m.TechnicalWinnnerId == m.GuestTeam.TeamId)
+                                            {
+                                                <span class="label label-success">@Messages.TechWin</span>
+                                            }
+                                        }
+                                        else if (@m.PlayoffBracket != null)
+                                        {
+                                            if (m.PlayoffBracket.Type == (int)AppModel.PlayoffBracketType.Winner)
+                                            {
+                                                <a href="@Url.Action("PotentialTeams", "GameCycle" , new {id=m.PlayoffBracket.Id, index=2})"
+                                                   data-target="#barcket-potential-teams"
+                                                   data-toggle="modal">@Messages.Winner</a>
+                                            }
+                                            else if (m.PlayoffBracket.Type == (int)AppModel.PlayoffBracketType.Loseer)
+                                            {
+                                                <a href="@Url.Action("PotentialTeams", "GameCycle" , new {id=m.PlayoffBracket.Id, index=2})"
+                                                   data-target="#barcket-potential-teams"
+                                                   data-toggle="modal">@Messages.Loser</a>
+                                            }
+                                            else
+                                            {
+                                                @("--")
+                                            }
+                                        }
+                                    </td>
+                                    if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+                                    {
+                                        <td class="remove_print">
+                                            <a class="btn btn-sm btn-danger"
+                                               href="@Url.Action("Delete", new {id=m.CycleId})"
+                                               data-ajax-confirm="@Messages.DeleteConfirm"
+                                               data-ajax-update="#schedules"
+                                               data-ajax="true"
+                                               title="@Messages.Delete">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
+
+
+                                            <input name="CycleId" type="hidden" value="@m.CycleId" form="gamefrm@(m.CycleId)" />
+                                            <a class="btn btn-sm btn-success"
+                                               name="savebtn"
+                                               disabled="disabled"
+                                               onclick="gcList.SubmitGameForm(@m.CycleId)"
+                                               title="@Messages.Save">
+                                                <i class="glyphicon glyphicon-saved"></i>
+                                            </a>
+
+                                            @*@Html.ActionLink(Messages.ToGame, "Edit", "GameCycle", new { id = m.CycleId }, new { @class = "btn btn-sm btn-success" })*@
+
+                                            @if (m.HomeTeamId != null && m.GuestTeamId != null)
+                                            {
+                                                <a class="btn btn-sm btn-primary"
+                                                   href="@Url.Action("Edit", "GameCycle" , new {id=m.CycleId})"
+                                                   title="@Messages.ToGame">
+                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-sm btn-primary"
+                                                   href="@Url.Action("Edit", "GameCycle" , new {id=m.CycleId})"
+                                                   disabled="disabled"
+                                                   title="@Messages.ToGame">
+                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                </a>
+                                            }
+                                        </td>
+                                    }
+                                }
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+                            }
+    </div>
+
+                            }
+
+
+<script type="text/javascript" src="~/Scripts/pages/gameCycleList.js"></script>
+
+<script>
+    $(document).ready(function () {
+        gcList.documentReady();
+        $('#choice-submit').click(function() {
+            gcList.SubmitScheduleCond(@leagueId, true);
+        });
+    });
+</script>
+
+<div class="modal fade" id="barcket-potential-teams" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>

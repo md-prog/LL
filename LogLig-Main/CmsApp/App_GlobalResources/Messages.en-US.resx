@@ -1,0 +1,1036 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddFile" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="AddNew" xml:space="preserve">
+    <value>Add New</value>
+  </data>
+  <data name="Admins" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Ages" xml:space="preserve">
+    <value>Ages</value>
+  </data>
+  <data name="ArchiveConfirm" xml:space="preserve">
+    <value>Confirm archive an item</value>
+  </data>
+  <data name="Auditorium" xml:space="preserve">
+    <value>Arena</value>
+  </data>
+  <data name="Auditoriums" xml:space="preserve">
+    <value>Arena</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="CreateLeague" xml:space="preserve">
+    <value>Create League</value>
+  </data>
+  <data name="DataSavedSuccess" xml:space="preserve">
+    <value>Data saved successfully</value>
+  </data>
+  <data name="DeleteConfirm" xml:space="preserve">
+    <value>Confirm delete an item</value>
+  </data>
+  <data name="DeleteListConfirm" xml:space="preserve">
+    <value>Confirm delete an items</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Direction" xml:space="preserve">
+    <value>ltr</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Editors" xml:space="preserve">
+    <value>Editor</value>
+  </data>
+  <data name="Error_PositiveNumbersOnly" xml:space="preserve">
+    <value>Positive numbers only</value>
+  </data>
+  <data name="Fans" xml:space="preserve">
+    <value>Fan</value>
+  </data>
+  <data name="FieldMustBeNumeric" xml:space="preserve">
+    <value>Field must be numeric</value>
+  </data>
+  <data name="FileError" xml:space="preserve">
+    <value>Invalid file</value>
+  </data>
+  <data name="FileSizeError" xml:space="preserve">
+    <value>Invalid file size</value>
+  </data>
+  <data name="GameSettings" xml:space="preserve">
+    <value>Game Settings</value>
+  </data>
+  <data name="GamesTable" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="League" xml:space="preserve">
+    <value>League</value>
+  </data>
+  <data name="LeagueName" xml:space="preserve">
+    <value>League Name</value>
+  </data>
+  <data name="Leagues" xml:space="preserve">
+    <value>Leagues</value>
+  </data>
+  <data name="LeagueTable" xml:space="preserve">
+    <value>League Standings</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NoDataFound" xml:space="preserve">
+    <value>No data found</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>Permission</value>
+  </data>
+  <data name="Player" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="Players" xml:space="preserve">
+    <value>Players</value>
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value>Points</value>
+  </data>
+  <data name="Positions" xml:space="preserve">
+    <value>Positions</value>
+  </data>
+  <data name="PropertyValueRequired" xml:space="preserve">
+    <value>Value required</value>
+  </data>
+  <data name="PublishConfirm" xml:space="preserve">
+    <value>Confirm an action</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Official</value>
+  </data>
+  <data name="RolesTypes" xml:space="preserve">
+    <value>Officials types</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SearchName" xml:space="preserve">
+    <value>Search existing name</value>
+  </data>
+  <data name="Section" xml:space="preserve">
+    <value>Sport</value>
+  </data>
+  <data name="SectionName" xml:space="preserve">
+    <value>Sport Name</value>
+  </data>
+  <data name="Sections" xml:space="preserve">
+    <value>Sports</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>- select -</value>
+  </data>
+  <data name="SelectValidImage" xml:space="preserve">
+    <value>Select jpg image</value>
+  </data>
+  <data name="SetDiffs" xml:space="preserve">
+    <value>The ration</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SystemError" xml:space="preserve">
+    <value>System error</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
+  <data name="TermsFile" xml:space="preserve">
+    <value>Terms File</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Union" xml:space="preserve">
+    <value>Association</value>
+  </data>
+  <data name="Unions" xml:space="preserve">
+    <value>Associations</value>
+  </data>
+  <data name="UnionsInSection" xml:space="preserve">
+    <value>Sport Associations</value>
+  </data>
+  <data name="ClubsInSection" xml:space="preserve">
+    <value>Clubs</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>The user name is exists</value>
+  </data>
+  <data name="Wins" xml:space="preserve">
+    <value>Wins</value>
+  </data>
+  <data name="Workers" xml:space="preserve">
+    <value>Officials</value>
+  </data>
+  <data name="AddGame" xml:space="preserve">
+    <value>Add Game</value>
+  </data>
+  <data name="AddGroup" xml:space="preserve">
+    <value>Add Group</value>
+  </data>
+  <data name="AddEvent" xml:space="preserve">
+    <value>Add Event</value>
+  </data>
+  <data name="AddStage" xml:space="preserve">
+    <value>Add Stage</value>
+  </data>
+  <data name="AllCycles" xml:space="preserve">
+    <value>All Cycles</value>
+  </data>
+  <data name="ChevronCss" xml:space="preserve">
+    <value>glyphicon glyphicon-chevron-right</value>
+  </data>
+  <data name="ConfirmNewGamesTable" xml:space="preserve">
+    <value>Please Confirm Creating a new Schedule for stage {0}</value>
+  </data>
+  <data name="CreateGamesTable" xml:space="preserve">
+    <value>Set League Schedule</value>
+  </data>
+  <data name="Cycle" xml:space="preserve">
+    <value>Cycle</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Draw" xml:space="preserve">
+    <value>Draw</value>
+  </data>
+  <data name="Ended" xml:space="preserve">
+    <value>Ended</value>
+  </data>
+  <data name="ErrorGamesTableCreation" xml:space="preserve">
+    <value>Error in League Schedule creation, ensure last stage contain groups</value>
+  </data>
+  <data name="ExportReferees" xml:space="preserve">
+    <value>Export Referees Report</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Export To Excel</value>
+  </data>
+  <data name="ExternalLink" xml:space="preserve">
+    <value>External Link</value>
+  </data>
+  <data name="FirstGameStart" xml:space="preserve">
+    <value>Cycle start Date</value>
+  </data>
+  <data name="GamesDays" xml:space="preserve">
+    <value>Games Days</value>
+  </data>
+  <data name="GamesInterval" xml:space="preserve">
+    <value>Games Interval</value>
+  </data>
+  <data name="GameType" xml:space="preserve">
+    <value>Game Type</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="GuestTeam" xml:space="preserve">
+    <value>Guest Team</value>
+  </data>
+  <data name="HomeTeam" xml:space="preserve">
+    <value>Home Team</value>
+  </data>
+  <data name="InvalidTime" xml:space="preserve">
+    <value>Invalid time</value>
+  </data>
+  <data name="Loss" xml:space="preserve">
+    <value>Loss</value>
+  </data>
+  <data name="Men" xml:space="preserve">
+    <value>Men</value>
+  </data>
+  <data name="MoveCycle" xml:space="preserve">
+    <value>Move Cycle</value>
+  </data>
+  <data name="Referee" xml:space="preserve">
+    <value>Referee</value>
+  </data>
+  <data name="SequenceRounds" xml:space="preserve">
+    <value>Sequence Rounds</value>
+  </data>
+  <data name="ShowTerms" xml:space="preserve">
+    <value>Show File</value>
+  </data>
+  <data name="Stage" xml:space="preserve">
+    <value>Stage</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Started</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Swap" xml:space="preserve">
+    <value>Swap</value>
+  </data>
+  <data name="TeamExists" xml:space="preserve">
+    <value>Team is already exists</value>
+  </data>
+  <data name="TeamsNum" xml:space="preserve">
+    <value>Teams Number</value>
+  </data>
+  <data name="TechWin" xml:space="preserve">
+    <value>Tech Win</value>
+  </data>
+  <data name="ToGame" xml:space="preserve">
+    <value>Game</value>
+  </data>
+  <data name="Waiting" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+  <data name="WeekDays" xml:space="preserve">
+    <value>Su,Mo,Tu,We,Th,Fr,Sa</value>
+  </data>
+  <data name="Win" xml:space="preserve">
+    <value>Win</value>
+  </data>
+  <data name="Women" xml:space="preserve">
+    <value>Women</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="IdentNum" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="IvalidPasswrodPattern" xml:space="preserve">
+    <value>Minimum 8 english letters and numbers, maximum sequence is 3</value>
+  </data>
+  <data name="Lang" xml:space="preserve">
+    <value>en</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Acts" xml:space="preserve">
+    <value>Sets</value>
+  </data>
+  <data name="ActsRatio" xml:space="preserve">
+    <value>Sets Ratio</value>
+  </data>
+  <data name="AddAct" xml:space="preserve">
+    <value>Add a quarter</value>
+  </data>
+  <data name="AddGameToStage" xml:space="preserve">
+    <value>Add game to stage</value>
+  </data>
+  <data name="AddNewPlayer" xml:space="preserve">
+    <value>Add New Player</value>
+  </data>
+  <data name="BirthDay" xml:space="preserve">
+    <value>Birthday</value>
+  </data>
+  <data name="Blocked" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="CommonTeamsList" xml:space="preserve">
+    <value>Common Teams List</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="EndGame" xml:space="preserve">
+    <value>End Game</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="GamesNum" xml:space="preserve">
+    <value>Games</value>
+  </data>
+  <data name="GuesTeamPoints" xml:space="preserve">
+    <value>Gues Team Points</value>
+  </data>
+  <data name="Heigth" xml:space="preserve">
+    <value>Heigth (cm)</value>
+  </data>
+  <data name="HomeTeamPoints" xml:space="preserve">
+    <value>Home Team Points</value>
+  </data>
+  <data name="Insurance" xml:space="preserve">
+    <value>Insurance</value>
+  </data>
+  <data name="LossNum" xml:space="preserve">
+    <value>Losses</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Main</value>
+  </data>
+  <data name="ManagementSystem" xml:space="preserve">
+    <value>Management System</value>
+  </data>
+  <data name="MedicalCertificate" xml:space="preserve">
+    <value>Medical Certificate</value>
+  </data>
+  <data name="NotAuthorizedPage" xml:space="preserve">
+    <value>You not authorized to view this page</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>Page not found</value>
+  </data>
+  <data name="PersonnelImage" xml:space="preserve">
+    <value>Personnel Image</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="PlayerCardNumber" xml:space="preserve">
+    <value>Player ID Number</value>
+  </data>
+  <data name="PointsRatio" xml:space="preserve">
+    <value>Points Ratio</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="RoundsNumber" xml:space="preserve">
+    <value>Number of Rounds</value>
+  </data>
+  <data name="SelectOtherTeam" xml:space="preserve">
+    <value>Select an other team</value>
+  </data>
+  <data name="Shirt" xml:space="preserve">
+    <value>Jersey</value>
+  </data>
+  <data name="ShirtNumber" xml:space="preserve">
+    <value>Jersey Number</value>
+  </data>
+  <data name="StartGame" xml:space="preserve">
+    <value>Start Game</value>
+  </data>
+  <data name="UpdateGameResults" xml:space="preserve">
+    <value>Update Game Results</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User Name</value>
+  </data>
+  <data name="WinsNum" xml:space="preserve">
+    <value>Wins</value>
+  </data>
+  <data name="AuditoriumAlreadyExsits" xml:space="preserve">
+    <value>Arena already exsits</value>
+  </data>
+  <data name="EmailAlreadyExists" xml:space="preserve">
+    <value>Email {0} is already exists</value>
+  </data>
+  <data name="IdIsAlreadyExists" xml:space="preserve">
+    <value>ID {0} is already exists</value>
+  </data>
+  <data name="PlayerAlreadyInTeam" xml:space="preserve">
+    <value>Player already in a team</value>
+  </data>
+  <data name="PlayerAlreadyOnThisPosition" xml:space="preserve">
+    <value>Player already on this position</value>
+  </data>
+  <data name="PlayerNotExists" xml:space="preserve">
+    <value>Player does not exists</value>
+  </data>
+  <data name="RoleNotExists" xml:space="preserve">
+    <value>Official not exists</value>
+  </data>
+  <data name="ShirtAlreadyExists" xml:space="preserve">
+    <value>Jersey number already exists</value>
+  </data>
+  <data name="UserAlreadyHasThisRole" xml:space="preserve">
+    <value>User already hold this position</value>
+  </data>
+  <data name="UserNotExists" xml:space="preserve">
+    <value>User not exists</value>
+  </data>
+  <data name="DeleteLeaguesFirst" xml:space="preserve">
+    <value>Delete leagues of this association first</value>
+  </data>
+  <data name="DeleteTeamsFirst" xml:space="preserve">
+    <value>Delete teams of this league first</value>
+  </data>
+  <data name="TechLoss" xml:space="preserve">
+    <value>Tech Loss</value>
+  </data>
+  <data name="SelectValidFile" xml:space="preserve">
+    <value>Select valid {0} file</value>
+  </data>
+  <data name="ResetGame" xml:space="preserve">
+    <value>Reset Game</value>
+  </data>
+  <data name="ConfirmResetGame" xml:space="preserve">
+    <value>Please Confirm reseting this game</value>
+  </data>
+  <data name="UpdateGameWarnning" xml:space="preserve">
+    <value>You are changing game data manually. 
+Please Make sure that the changes do not conflict with other games that take place at the same time and the same auditorium.</value>
+  </data>
+  <data name="ShowGamesChronological" xml:space="preserve">
+    <value>Show games in chronological order</value>
+  </data>
+  <data name="ShowGamesStages" xml:space="preserve">
+    <value>Show games by stages</value>
+  </data>
+  <data name="AssociationAdmin" xml:space="preserve">
+    <value>Association Administrator</value>
+  </data>
+  <data name="Coach" xml:space="preserve">
+    <value>Coach</value>
+  </data>
+  <data name="LeagueAdmin" xml:space="preserve">
+    <value>League Administrator</value>
+  </data>
+  <data name="TeamAdmin" xml:space="preserve">
+    <value>Team Administrator</value>
+  </data>
+  <data name="Female" xml:space="preserve">
+    <value>Female</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Male</value>
+  </data>
+  <data name="Division" xml:space="preserve">
+    <value>Division</value>
+  </data>
+  <data name="Knockout" xml:space="preserve">
+    <value>Knockout</value>
+  </data>
+  <data name="Playoff" xml:space="preserve">
+    <value>Playoff</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>MM/dd/yyyy HH:mm</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Loser" xml:space="preserve">
+    <value>Loser</value>
+  </data>
+  <data name="Winner" xml:space="preserve">
+    <value>Winner</value>
+  </data>
+  <data name="GoldenSet" xml:space="preserve">
+    <value>Golden Set</value>
+  </data>
+  <data name="Places" xml:space="preserve">
+    <value>Places</value>
+  </data>
+  <data name="AddNewTeam" xml:space="preserve">
+    <value>Add as new team</value>
+  </data>
+  <data name="AddTeam" xml:space="preserve">
+    <value>Add team</value>
+  </data>
+  <data name="TeamNotFound" xml:space="preserve">
+    <value>Team was not foun in the system</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="EilatTournament" xml:space="preserve">
+    <value>Eilat Tournament</value>
+  </data>
+  <data name="Tournament" xml:space="preserve">
+    <value>Tournament</value>
+  </data>
+  <data name="AddTournament" xml:space="preserve">
+    <value>Add Tournament</value>
+  </data>
+  <data name="Final" xml:space="preserve">
+    <value>Final</value>
+  </data>
+  <data name="FinalNumber" xml:space="preserve">
+    <value>Final</value>
+  </data>
+  <data name="Final_Eighth" xml:space="preserve">
+    <value>Final Eighth</value>
+  </data>
+  <data name="Quarter_finals" xml:space="preserve">
+    <value>Quarter-finals</value>
+  </data>
+  <data name="Semifinals" xml:space="preserve">
+    <value>Semifinals</value>
+  </data>
+  <data name="ResetScores" xml:space="preserve">
+    <value>Reset scores</value>
+  </data>
+  <data name="SetTheScoresManualy" xml:space="preserve">
+    <value>Set the scores manualy</value>
+  </data>
+  <data name="WithTheirRecords" xml:space="preserve">
+    <value>With their records</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="SortArea" xml:space="preserve">
+    <value>Sort by arena</value>
+  </data>
+  <data name="SortTime" xml:space="preserve">
+    <value>Sort by date</value>
+  </data>
+  <data name="SequenceRounds0" xml:space="preserve">
+    <value>In a row every week</value>
+  </data>
+  <data name="SequenceRounds1" xml:space="preserve">
+    <value>One week on, One week off</value>
+  </data>
+  <data name="SequenceRounds2" xml:space="preserve">
+    <value>Two weeks on, One week off</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="UnionDescription" xml:space="preserve">
+    <value>Description about the Association</value>
+  </data>
+  <data name="UnionIndex" xml:space="preserve">
+    <value>Association Index info</value>
+  </data>
+  <data name="Seasons" xml:space="preserve">
+    <value>Seasons</value>
+  </data>
+  <data name="ImportFromExcel" xml:space="preserve">
+    <value>Import from excel</value>
+  </data>
+  <data name="ClubInformationTab" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="ClubMainTab" xml:space="preserve">
+    <value>Main</value>
+  </data>
+  <data name="ClubOfficialsTab" xml:space="preserve">
+    <value>Officials</value>
+  </data>
+  <data name="Tournaments" xml:space="preserve">
+    <value>Tournaments</value>
+  </data>
+  <data name="MoveTeamToLeague" xml:space="preserve">
+    <value>Move team to league</value>
+  </data>
+  <data name="SelectLeagueToMove" xml:space="preserve">
+    <value>Select league to move</value>
+  </data>
+  <data name="ClubAbout" xml:space="preserve">
+    <value>About club</value>
+  </data>
+  <data name="ClubDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="ClubName" xml:space="preserve">
+    <value>Club name</value>
+  </data>
+  <data name="ClubTermsCondition" xml:space="preserve">
+    <value>Terms condition</value>
+  </data>
+  <data name="MovePlayerToTeam" xml:space="preserve">
+    <value>Move player to another team</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="SelectAllPlayers" xml:space="preserve">
+    <value>Select all players</value>
+  </data>
+  <data name="CreateTournament" xml:space="preserve">
+    <value>Create Tournament</value>
+  </data>
+  <data name="ChangeOrderStages" xml:space="preserve">
+    <value> Change order stages</value>
+  </data>
+  <data name="SelectAllTeams" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="MoveToLeague" xml:space="preserve">
+    <value>Move To League</value>
+  </data>
+  <data name="MovePlayer" xml:space="preserve">
+    <value>Move Player</value>
+  </data>
+  <data name="CreateNewTeam" xml:space="preserve">
+    <value>Create New Team</value>
+  </data>
+  <data name="SelectTeam" xml:space="preserve">
+    <value>Select Team</value>
+  </data>
+  <data name="IsPublished" xml:space="preserve">
+    <value>Publish all on App</value>
+  </data>
+  <data name="UnderAdult" xml:space="preserve">
+    <value>Under Adult Team?</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="IsReserved" xml:space="preserve">
+    <value>Reserved Team?</value>
+  </data>
+  <data name="MinimumAge" xml:space="preserve">
+    <value>Minimum Age</value>
+  </data>
+  <data name="LeagueCode" xml:space="preserve">
+    <value>League Code</value>
+  </data>
+  <data name="PassportNum" xml:space="preserve">
+    <value>Passport</value>
+  </data>
+  <data name="InsuranceDate" xml:space="preserve">
+    <value>Insurance End Date</value>
+  </data>
+  <data name="InsuranceFile" xml:space="preserve">
+    <value>Medical certificate</value>
+  </data>
+  <data name="AssociationNumber" xml:space="preserve">
+    <value>Association Number</value>
+  </data>
+  <data name="ExportUnionReport" xml:space="preserve">
+    <value>Export Union Report</value>
+  </data>
+  <data name="Print" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="NumberOfPlayers" xml:space="preserve">
+    <value>Total Players</value>
+  </data>
+  <data name="NumberOfOfficials" xml:space="preserve">
+    <value>Total Officials</value>
+  </data>
+  <data name="SelectAll" xml:space="preserve">
+    <value>Publish on App</value>
+  </data>
+  <data name="TooltipMoveToLeague" xml:space="preserve">
+    <value>Move selected Team/s to diffrent League</value>
+  </data>
+  <data name="TooltipPublishApp" xml:space="preserve">
+    <value>Select to Publish or not to Publish the League Schedule on the App and External Links</value>
+  </data>
+  <data name="Quarters" xml:space="preserve">
+    <value>Quarters</value>
+  </data>
+  <data name="GoalRatio" xml:space="preserve">
+    <value>Goal Ratio</value>
+  </data>
+  <data name="TooltipImportFromExcel" xml:space="preserve">
+    <value>Import schedule back from excel to update games time and date</value>
+  </data>
+  <data name="TooltipExportToExcel" xml:space="preserve">
+    <value>Export the League schedule to Excel</value>
+  </data>
+  <data name="AddQuarter" xml:space="preserve">
+    <value>Add Quarter</value>
+  </data>
+  <data name="BasketRatio" xml:space="preserve">
+    <value>Pf-Pa</value>
+  </data>
+  <data name="Pools" xml:space="preserve">
+    <value>Pools</value>
+  </data>
+  <data name="ExtendedTable" xml:space="preserve">
+    <value>Extended table</value>
+  </data>
+  <data name="LeagueAbout" xml:space="preserve">
+    <value>About league</value>
+  </data>
+  <data name="LeagueStructure" xml:space="preserve">
+    <value>League structure</value>
+  </data>
+  <data name="HelpTextAboutLeague" xml:space="preserve">
+    <value>This will display in bold text on the external link output.</value>
+  </data>
+  <data name="MaxLengthLeagueStructure" xml:space="preserve">
+    <value>Too many characters. Allowed {1} .</value>
+  </data>
+  <data name="MaxLengthAboutLeague" xml:space="preserve">
+    <value>Too many characters. Allowed {1} .</value>
+  </data>
+  <data name="GamesUrl" xml:space="preserve">
+    <value>Games url</value>
+  </data>
+  <data name="Games" xml:space="preserve">
+    <value>Games</value>
+  </data>
+  <data name="Last5" xml:space="preserve">
+    <value>Last 5</value>
+  </data>
+  <data name="Papf" xml:space="preserve">
+    <value>Pa-pf</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="Road" xml:space="preserve">
+    <value>Win/ Lost - Road</value>
+  </data>
+  <data name="ScoreRoad" xml:space="preserve">
+    <value>Score road</value>
+  </data>
+  <data name="GamePaPf" xml:space="preserve">
+    <value>Game pa-pf</value>
+  </data>
+  <data name="ScoreHome" xml:space="preserve">
+    <value>Score home</value>
+  </data>
+  <data name="DateTime" xml:space="preserve">
+    <value>Date/ Time</value>
+  </data>
+  <data name="Score" xml:space="preserve">
+    <value>Score</value>
+  </data>
+  <data name="Standings" xml:space="preserve">
+    <value>Standings</value>
+  </data>
+  <data name="WinsLostHome" xml:space="preserve">
+    <value>Win/ Lost - Home</value>
+  </data>
+  <data name="AddEventToLeague" xml:space="preserve">
+    <value>Add new event to league</value>
+  </data>
+  <data name="Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="Place" xml:space="preserve">
+    <value>Place</value>
+  </data>
+  <data name="PlaceOfEvent" xml:space="preserve">
+    <value>place of event</value>
+  </data>
+  <data name="TitleOfEvent" xml:space="preserve">
+    <value>title of event</value>
+  </data>
+  <data name="ToEvent" xml:space="preserve">
+    <value>to event</value>
+  </data>
+  <data name="Events" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="TechLossesNum" xml:space="preserve">
+    <value>Tec</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>all</value>
+  </data>
+  <data name="BeginningOfMonth" xml:space="preserve">
+    <value>beginning of month</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="Ranged" xml:space="preserve">
+    <value>ranged</value>
+  </data>
+  <data name="RangeEnd" xml:space="preserve">
+    <value>Range end</value>
+  </data>
+  <data name="RangeStart" xml:space="preserve">
+    <value>Range start</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="NoGamesFound" xml:space="preserve">
+    <value>No games have been selected by current conditions!</value>
+  </data>
+  <data name="ResetWarning" xml:space="preserve">
+    <value>Resetting this game will reset all dependent ones as well. Are you sure?</value>
+  </data>
+  <data name="NameSportCenter" xml:space="preserve">
+    <value>Name Sports Center</value>
+  </data>
+  <data name="NGO_Number" xml:space="preserve">
+    <value>NGO number</value>
+  </data>
+  <data name="ClubManager" xml:space="preserve">
+    <value>Club Manager</value>
+  </data>
+  <data name="AddEventToClub" xml:space="preserve">
+    <value>Add event to club</value>
+  </data>
+</root>

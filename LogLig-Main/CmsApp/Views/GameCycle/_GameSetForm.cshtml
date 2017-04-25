@@ -1,0 +1,56 @@
+﻿@model CmsApp.Models.GameSetForm
+@using (Ajax.BeginForm("AddGameSet", null, new AjaxOptions
+{
+    UpdateTargetId = "gamesetstable",
+    InsertionMode = InsertionMode.Replace
+},
+                                        new
+                                        {
+                                            id = "gamesetfrm"
+                                        }))
+{
+    <div id="backgroundgrey">
+        <div class="row">
+            <div class="col-sm-2">
+                <label class="control-label">@Messages.HomeTeamPoints</label>
+            </div>
+            <div class="col-sm-2">
+                <label class="control-label">@Messages.GuesTeamPoints</label>
+            </div>
+
+            <div class="col-sm-2">
+                <label class="control-label">@Messages.GoldenSet</label>
+            </div>
+
+
+        </div>
+        <div class="row">
+            @Html.HiddenFor(m => m.GameCycleId)
+            <div class="col-sm-2">
+                @Html.TextBoxFor(model => model.HomeTeamScore, new { @class = "form-control", onkeypress = "return numbersonly(event)" })
+                @Html.ValidationMessageFor(model => model.HomeTeamScore, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-sm-2">
+                @Html.TextBoxFor(model => model.GuestTeamScore, new { @class = "form-control", onkeypress = "return numbersonly(event)" })
+                @Html.ValidationMessageFor(model => model.GuestTeamScore, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-sm-2">
+                @Html.CheckBoxFor(model => model.IsGoldenSet, new { onkeypress = "return numbersonly(event)" })
+                @Html.ValidationMessageFor(model => model.IsGoldenSet, "", new { @class = "text-danger" })
+            </div>
+
+
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>@Messages.AddAct</span>
+                </button>
+                <a class="btn btn-sm btn-primary" 
+                   href='javascript:gcEdit.updateGameResult(@Model.warnOnReset, "@Messages.ResetWarning", @Model.GameCycleId, false)'>
+                    <i href="#" class="glyphicon glyphicon-refresh"></i>@Messages.UpdateGameResults
+                </a>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,221 @@
+﻿@model LeagueDetailsForm
+@{
+    var gendersList = Model.Genders.Select(r => new SelectListItem
+    {
+        Value = r.Value,
+        Text = LangHelper.GetGender(r.Text)
+    });
+}
+<form id="detailsform" method="post" data-targetid="details" action="@Url.Action("Details")" autocomplete="off" enctype="multipart/form-data">
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <label class="control-label">@Messages.LeagueName:</label>
+                    @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+                    @Html.ValidationMessageFor(m => m.Name)
+                </div>
+            </div>
+            @if (Model.IsHadicapEnabled)
+            {
+                <div class="row">
+                    <div class="col-sm-6 form-group">
+                        <label class="control-label">@Messages.MaximumHandicapScoreValue:</label>
+                        @Html.TextBoxFor(m => m.MaximumHandicapScoreValue, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.MaximumHandicapScoreValue)
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">@Messages.Logo:</label> (<span>2mb</span>)
+                    <table>
+                        <tr>
+                            <td width="100px">
+                                @Html.Editor("LogoFile", "ImageUpload", new { css = "validfile" })
+                            </td>
+                            <td width="10px"></td>
+                            <td>
+                                <a class="btn btn-sm btn-danger"
+                                   href="@Url.Action("DeleteImage", new {leagueId = Model.LeagueId, image = "Logo"})"
+                                   title="@Messages.Delete">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                    @Html.ValidationMessage("LogoFile")
+                    @if (!string.IsNullOrEmpty(Model.Logo))
+                {
+                        <div class="offset-2"></div>
+                        @ShowImage(Model.Logo)
+                    }
+
+
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">@Messages.Image:</label> (<span>2mb</span>)
+                    <table>
+                        <tr>
+                            <td width="100px">
+                                @Html.Editor("ImageFile", "ImageUpload", new { css = "validfile" })
+                            </td>
+                            <td width="10px"></td>
+                            <td>
+                                <a class="btn btn-sm btn-danger"
+                                   href="@Url.Action("DeleteImage", new {leagueId = Model.LeagueId, image = "Image"})"
+                                   title="@Messages.Delete">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                    @Html.ValidationMessage("ImageFile")
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                        <div class="offset-2"></div>
+                        @ShowImage(Model.Image)
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="progress progress-striped">
+                        <div class="progress-bar progress-bar-success">0%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">@Messages.Gender:</label>
+                    @Html.DropDownListFor(m => m.GenderId, gendersList, new { @class = "form-control" })
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">@Messages.Ages:</label>
+                    @Html.DropDownListFor(m => m.AgeId, Model.Ages, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">@Messages.MinimumAge:</label>
+                    <div style="position: relative">
+                        <input type="text" name="StartDate" value="" class="form-control frm-date" />
+                    </div>
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">@Messages.LeagueCode:</label>
+                    <div style="position: relative">
+                        <input type="number" name="LeagueCode" value="" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-sm-6 for-group">
+                    <label>@Messages.LeagueAbout:</label>
+                    <div style="position: relative">
+                        @Html.TextBoxFor(x=>x.AboutLeague,null, new {@class = "form-control", @type = "text", @data_toggle="tooltip", title = Messages.HelpTextAboutLeague })
+                        @Html.ValidationMessageFor(x=>x.AboutLeague)
+                    </div>
+                </div>
+
+                <div class="col-sm-6 for-group">
+                    <label>@Messages.LeagueStructure:</label>
+                    <div style="position: relative">
+                       @Html.TextAreaFor(x=>x.LeagueStructure, new {@class = "form-control"})
+                        @Html.ValidationMessageFor(x=>x.LeagueStructure)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label class="control-label">@Messages.TermsFile:</label> (<span>2mb</span>)
+                    @if (Model.DocId != 0)
+                {
+                        <a href="@Url.Action("ShowDoc", new { id = Model.DocId })" target="_blank">@Messages.ShowTerms</a>
+                    }
+                    <span class="btn btn-default btn-file">
+                        <span>@Messages.AddFile</span>
+                        <input type="file" name="DocFile" data-val="true" data-val-regex-pattern="^.*\.(pdf|PDF)$" data-val-regex="@string.Format(Messages.SelectValidFile, "PDF")" accept="application/pdf" />
+                    </span>
+                    @Html.ValidationMessage("DocFile")
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    @if (TempData["Saved"] != null)
+                {
+                        <span class="text-success">@Messages.DataSavedSuccess</span>
+                    }
+                </div>
+                <div class="col-sm-4 text-align">
+                    <button class="btn btn-primary">@Messages.Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>@Messages.NumberOfPlayers</h5>
+                        <h1 class="no-margins"><span>@Model.PlayersCount</span></h1>
+                    </div>
+                </div>
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <h5>@Messages.NumberOfOfficials</h5>
+                        <h1 class="no-margins"><span>@Model.OfficialsCount</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <h3>@Model.Name</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3 form-group">
+                @if (!string.IsNullOrEmpty(Model.Logo))
+                {
+                    <div class="offset-2"></div>
+                        @ShowImage(Model.Logo)
+                }
+            </div>
+            <div class="col-sm-3 form-group">
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    <div class="offset-2"></div>
+                        @ShowImage(Model.Image)
+                }
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-sm-3 form-group">
+                    <label class="control-label">@Messages.Gender: @gendersList.ToList()[Model.GenderId].Text</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3 form-group">
+                    <label class="control-label">@Messages.Ages: @Model.Ages.ToList()[Model.AgeId].Text</label>
+                </div>
+            </div>
+    }
+    @Html.HiddenFor(m => m.LeagueId)
+</form>
+
+@helper ShowImage(string imgName)
+{
+string src = GlobVars.ContentPath + "/league/" + imgName;
+    <img class="img-responsive img-thumbnail" src="@src" />
+}
+
+<script>
+    $('#detailsform').validateBootstrap(true);
+    setFileUpload('#detailsform', '#details');
+
+    $('[data-toggle="tooltip"]').tooltip();
+</script>
+

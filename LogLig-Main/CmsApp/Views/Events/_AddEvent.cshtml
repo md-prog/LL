@@ -1,0 +1,71 @@
+﻿@using AppModel
+@model CmsApp.Models.EventForm
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+    @if (Model.LeagueId.HasValue)
+    {
+        <h4 class="modal-title">@Messages.AddEventToLeague @Model.LeagueName </h4>
+    }
+    else
+    {
+        <h4 class="modal-title">@Messages.AddEventToClub @Model.ClubName </h4>
+    }
+</div>
+
+@using (Ajax.BeginForm("AddEvent", null,
+                                    new AjaxOptions {
+                                        UpdateTargetId = "event_list",
+                                        OnComplete = "evList.hideModalDialog()"
+                                    },
+                                    new { id = "neweventform" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.EventId)
+        @Html.HiddenFor(model => model.LeagueId)
+        @Html.HiddenFor(model => model.ClubId)
+
+        <div class="form-group">
+            <label class="control-label">@Messages.Event:</label>
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">@Messages.Date:</label>
+            <input type='text' name='EventTime' value='@Model.EventTime.ToString("dd/MM/yyyy HH:mm")' class="form-control frm-date required" />
+            @*@Html.EditorFor(model => model.EventTime.ToString("dd/MM/yyyy HH:mm"), new { htmlAttributes = new { @class = "form-control frm-date" } })*@
+            @Html.ValidationMessageFor(model => model.EventTime, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">@Messages.Place:</label>
+            @Html.EditorFor(model => model.Place, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Place, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">@Messages.Close</button>
+        <button id="savebtn" class="btn btn-primary">@Messages.Save</button>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        var frm = $('#neweventform');
+        frm.validateBootstrap(true);
+
+        $('#savebtn', frm).click(function () {
+            return true;
+        });
+
+        cmn.initDateTimePickers();
+    });
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

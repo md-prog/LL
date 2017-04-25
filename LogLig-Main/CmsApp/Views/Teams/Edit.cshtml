@@ -1,0 +1,162 @@
+﻿@model TeamNavView
+
+<div class="row">
+    <div class="col-lg-10">
+        <h3 class="sub-header">
+            @{
+                int i = 0;
+                foreach (var l in Model.leagues)
+                {
+                    if (i++ > 0)
+                    { <text>, </text> }
+                    if (Model.IsValidUser || Model.UserLeagues.Any(t => t.Name == l.Name))
+                    {
+                        <a href="@Url.Action("Edit", "Leagues", new { id = l.Id, seasonId = Model.SeasonId })">@l.Name</a>
+                    }
+                    else
+                    {
+                        @l.Name
+                    }
+                }
+
+                if (Model.leagues.Count > 0 && Model.clubs.Count > 0)
+                { <text>, </text> }
+
+                i = 0;
+                foreach (var c in Model.clubs)
+                {
+                    if (i++ > 0)
+                    { <text>, </text> }
+                    <a href="@Url.Action("Edit", "Clubs", new { id = c.Id})">@c.Name</a>
+                }
+            }
+
+            <span>&raquo;</span> @Model.TeamName
+        </h3>
+    </div>
+    <div class="col-lg-2">
+        <h3 class="currentSeason"></h3>
+    </div>
+</div>
+
+<ul class="nav nav-tabs" id="league_tabs" role="tablist">
+    <li class="active"><a href="#details" data-toggle="tab">@Messages.Info</a></li>
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <li><a href="#players" data-toggle="tab">@Messages.Players</a></li>
+        <li><a href="#userstab" data-toggle="tab">@Messages.Workers</a></li>
+        <li><a href="#halls" data-toggle="tab">@Messages.Auditoriums</a></li>
+    }
+    <li><a href="#schedules" data-toggle="tab">@Messages.GamesTable</a></li>
+    <li><a href="#standings" data-toggle="tab">@Messages.Standings</a></li>
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <li><a href="#notifications" data-toggle="tab">@Messages.Notifications</a></li>
+    }
+   
+</ul>
+<div class="tab-content row offset-3">
+    <div class="tab-pane fade in active col-sm-10" id="details">
+        @Html.Action("Details", new { id = Model.TeamId, seasonId = Model.SeasonId })
+    </div>
+    <div class="tab-pane fade col-sm-10" id="players">
+        <a class="btn btn-primary" href="@Url.Action("CreatePlayer", "TeamPlayers", new { leagueId = Model.CurrentLeagueId, teamId = Model.TeamId, seasonId = Model.SeasonId})"
+           data-target="#playereditform"
+           data-toggle="modal">
+            <i class="glyphicon glyphicon-plus"></i>@Messages.AddNew
+        </a>
+        
+        @if (User.IsInAnyRole(AppRole.Workers, AppRole.Admins) && Model.JobRole != JobRole.TeamManager)
+        {
+            <a class="btn btn-primary" id="moveplayerteambtn" data-url="@Url.Action("MovePlayerToTeam", "TeamPlayers", new {teamId = Model.TeamId, leagueId = Model.CurrentLeagueId, seasonId = Model.SeasonId, clubId = Model.ClubId, unionId = Model.UnionId})">
+                <i class="glyphicon glyphicon-move"></i>@Messages.MovePlayerToTeam
+            </a>
+
+            <a class="btn btn-primary" href="javascript:;;" id="select-all-players">
+                <i class="glyphicon glyphicon-ok"></i>@Messages.SelectAllPlayers
+            </a>
+        }
+        
+        <div id="playersedit" class="offset-3">
+            @Html.Action("List", "TeamPlayers", new { id = Model.TeamId, seasonId = Model.SeasonId, leagueId = Model.CurrentLeagueId, clubId = Model.ClubId })
+        </div>
+    </div>
+    <div class="tab-pane fade col-sm-7 offset-2" id="userstab">
+        <div id="workers_list">
+            @Html.Action("WorkerList", "Jobs", new { id = Model.TeamId, logicalName = LogicaName.Team, seasonId = Model.SeasonId, leagueId = Model.CurrentLeagueId })
+        </div>
+    </div>
+    <div class="tab-pane fade col-sm-6" id="halls">
+        @Html.Action("List", "TeamsAuditoriums", new {id = Model.TeamId, clubId = Model.ClubId, Model.SeasonId})
+    </div>
+    <div class="tab-pane fade" id="schedules">
+        @Html.Action("TeamList", "Schedules", new { id = Model.TeamId, seasonId = Model.SeasonId })
+    </div>
+    <div class="tab-pane fade" id="notifications">
+        @Html.Action("Add", "Notifications", new {entityId = Model.TeamId, logicalName = LogicaName.Team})
+    </div>
+    <div class="tab-pane fade" id="standings" style="padding: 0px; border-top: none;">
+        @Html.Action("TeamStandings", "Teams", new {teamId = Model.TeamId, seasonId = Model.SeasonId})
+    </div>
+</div>
+
+
+<div class="modal fade" id="playereditform" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="playereditform_pl"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="playermoveform" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="playermoveform_pl"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="useredit" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="userform_pl"></div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            $('#select-all-players').click(function() {
+                $('[name="moveplayer"]:checkbox').click();
+            });
+
+            $('#moveplayerteambtn').click(function() {
+                var url = $(this).data('url');
+                var playerstoMove = $('[name="moveplayer"]:checked');
+                if (playerstoMove.length == 0) {
+                    alert('Select at least one player.');
+                    return;
+                } else {
+                    $.get(url, function(result) {
+                        $('#playermoveform_pl').html(result);
+                        $('#playermoveform').modal('show');
+
+                        $('#playersToPost').empty();
+                        $(playerstoMove).each(function(k, v) {
+                            $('#playersToPost').append($('<input type="hidden" name="Players" value="' + $(v).val() + '"/>'));
+                        });
+                    });
+                }
+            });
+
+            //excel import
+            $('#btn-excel-import').on('click', function(e) {
+                e.preventDefault();
+                $('#file-import-from-excel').trigger("click");
+            });
+
+            $('#file-import-from-excel').on('change', function() {
+                var form = $(this).parents('form');
+                form.submit();
+            });
+        })
+    </script>
+    <script src="/Scripts/pages/scrappingTeamClubs.js"></script>
+}

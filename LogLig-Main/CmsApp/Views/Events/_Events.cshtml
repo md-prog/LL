@@ -1,0 +1,115 @@
+﻿@model EventModel
+
+@{
+    bool userIsEditor = User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers);
+}
+
+@if (Model.isCollapsable)
+{
+    <table>
+        <tr>
+            <td>
+                <a href="javascript:evList.eventsOpen()" id="eventsOpen" style="display:none">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </a>
+                <a href="javascript:evList.eventsClose()" id="eventsClose">
+                    <i class="glyphicon glyphicon-minus"></i>
+                </a>
+            </td>
+            <td>
+                <h3>
+                    @Messages.Events
+                </h3>
+            </td>
+        </tr>
+    </table>
+}
+
+<table id="events_tbl" class="table table-bordered offset-2">
+    <thead>
+        <tr>
+            <th width="1%"></th>
+            <th width="35%">@Messages.PlaceOfEvent</th>
+            <th width="35%">@Messages.TitleOfEvent</th>
+            <th width="width=" 10%" style="min-width:160px">@Messages.DateTime</th>
+            @if (userIsEditor)
+            {
+                <th width="13%"></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.EventList?.Count() > 0)
+            {
+                foreach (var ev in Model.EventList)
+                {
+                    <tr id="event_@ev.EventId">
+                        <td class="remove_print">
+                            <input type="checkbox" id="EventChbx_@ev.EventId"
+                                   name="IsPublished" class="EventChbx"
+                                   value="@ev.EventId)" @(ev.IsPublished ? "checked" : string.Empty)
+                                   onclick="evList.publishEvent(@ev.EventId)" />
+                        </td>
+                        @if (!userIsEditor)
+                        {
+                            <td>@ev.Place</td>
+                                <td>@ev.Title</td>
+                                <td style="position:relative">@ev.EventTime</td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.AntiForgeryToken()
+                                <input name="EventId" type="hidden" value="@ev.EventId">
+                                <input name="LeagueId" type="hidden" value="@ev.LeagueId" />
+                                <input name="ClubId" type="hidden" value="@ev.ClubId" />
+                                <input name="CreateDate" type="hidden" value="@ev.CreateDate.ToString("yyyy-MM-dd HH:mm:ss")" />
+                                <input type="text" name="Place" value="@ev.Place" class="form-control required" form="eventfrm@ev.EventId" />
+                            </td>
+                                <td>
+                                    <input type="text" name="Title" value="@ev.Title" class="form-control required" form="eventfrm@ev.EventId" />
+                                </td>
+                                <td>
+                                    <div style="position: relative">
+                                        <input type="text" name="EventTime" value="@ev.EventTime.ToString("dd/MM/yyyy HH:mm")" class="form-control frm-date required" form="eventfrm@ev.EventId" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-danger"
+                                       href="@Url.Action("DeleteEvent", "Events",
+                                            new { eventId = ev.EventId, leagueId = ev.LeagueId, clubId = ev.ClubId})"
+                                       data-ajax-confirm="@Messages.DeleteConfirm"
+                                       data-ajax-update="#event_list"
+                                       data-ajax="true"
+                                       title="@Messages.Delete">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-success"
+                                       name="savebtn"
+                                       disabled="disabled"
+                                       onclick="evList.UpdateEvent(@ev.EventId)"
+                                       title="@Messages.Save">
+                                        <i class="glyphicon glyphicon-saved"></i>
+                                    </a>
+                                </td>
+                        }
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="addevent" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" id="addeventform_pl"></div>
+    </div>
+</div>
+
+<script src="~/Scripts/pages/eventsList.js"></script>
+<script>
+    $(document).ready(function () {
+        evList.documentReady();
+    });
+</script>

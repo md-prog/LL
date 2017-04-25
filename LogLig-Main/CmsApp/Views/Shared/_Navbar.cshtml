@@ -1,0 +1,12 @@
+﻿<li><a href="@Url.Action("Index", "Home")"><i class="@Messages.ChevronCss"></i> @Messages.Home</a></li>
+
+<li><a href="@Url.Action("Index", "Search")"><i class="@Messages.ChevronCss"></i> @Messages.Search</a></li>
+
+
+@if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors))
+{
+    <li><a href="@Url.Action("Index", "Sections")"><i class="@Messages.ChevronCss"></i> @Messages.Sections</a></li>
+
+    @*<li><a href="/users"><i class="glyphicon glyphicon-user"></i> משתמשי מערכת ניהול</a></li>*@
+    @*<li><a href="@Url.Action("Index", "Settings")"><i class="glyphicon glyphicon-wrench"></i> @Messages.Settings</a></li>*@
+}

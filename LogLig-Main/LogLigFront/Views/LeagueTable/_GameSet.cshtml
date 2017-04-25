@@ -1,0 +1,43 @@
+﻿@model ICollection<AppModel.GameSet>
+
+<div class="modal-dialog modal-sm">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close pull-left" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+            <h4 class="modal-title">תוצאות המערכות</h4>
+        </div>
+        <div class="modal-body">
+            @if (Model.Count == 0)
+            {
+                <div class="alert alert-warning">אין תוצאות</div>
+            }
+            else
+            {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>מערכה</th>
+
+                            <th>@ViewBag.HomeTeam</th>
+                            <th>@ViewBag.GuestTeam</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        @foreach (var set in Model)
+                        {
+                            <tr>
+                                <td>@set.SetNumber</td>
+                                <td>@set.HomeTeamScore</td>
+                                <td>@set.GuestTeamScore</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">סגור</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3AC2C1E0-E9FD-44B2-9AEF-B78AA145C6E5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DataService</RootNamespace>
+    <AssemblyName>DataService</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentScheduler">
+      <HintPath>..\packages\FluentScheduler.5.1.0\lib\net40\FluentScheduler.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebDriver">
+      <HintPath>..\packages\Selenium.WebDriver.3.0.0\lib\net40\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Support, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Selenium.Support.3.0.0\lib\net40\WebDriver.Support.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AuditoriumsRepo.cs" />
+    <Compile Include="AuthorizationEntitiesService.cs" />
+    <Compile Include="BaseRepo.cs" />
+    <Compile Include="BracketsRepo.cs" />
+    <Compile Include="ClubsRepo.cs" />
+    <Compile Include="CommentsRepo.cs" />
+    <Compile Include="ConnectionHelper.cs" />
+    <Compile Include="ContactsRepo.cs" />
+    <Compile Include="DataImportRepo.cs" />
+    <Compile Include="DTO\AuditoriumShort.cs" />
+    <Compile Include="DTO\ClubShort.cs" />
+    <Compile Include="DTO\GameDto.cs" />
+    <Compile Include="DTO\LeagueShort.cs" />
+    <Compile Include="DTO\LeagueTeamsDto.cs" />
+    <Compile Include="DTO\PlayerTeamDto.cs" />
+    <Compile Include="DTO\SchedulerDTO.cs" />
+    <Compile Include="DTO\StandingDTO.cs" />
+    <Compile Include="DTO\TeamDetailsDto.cs" />
+    <Compile Include="DTO\TeamDto.cs" />
+    <Compile Include="DTO\TeamInformationDto.cs" />
+    <Compile Include="DTO\TeamManagerTeamInformationDto.cs" />
+    <Compile Include="DTO\TeamShortDTO.cs" />
+    <Compile Include="EventsRepo.cs" />
+    <Compile Include="ExcelGameDto.cs" />
+    <Compile Include="ExcelGameService.cs" />
+    <Compile Include="GamesCycleDto.cs" />
+    <Compile Include="GamesNotificationsService.cs" />
+    <Compile Include="GamesRepo.cs" />
+    <Compile Include="GroupsRepo.cs" />
+    <Compile Include="JobsRepo.cs" />
+    <Compile Include="Jobs\GameScrapperJob.cs" />
+    <Compile Include="Jobs\Registry\GamesRegistry.cs" />
+    <Compile Include="LeagueRank\LeagueRankModels.cs" />
+    <Compile Include="LeagueRank\LeagueRankService.cs" />
+    <Compile Include="LeagueRank\LeagueSortDescriptors.cs" />
+    <Compile Include="LeagueRepo.cs" />
+    <Compile Include="LogService.cs" />
+    <Compile Include="NotesMessagesRepo.cs" />
+    <Compile Include="PlayersRepo.cs" />
+    <Compile Include="PlayoffModels.cs" />
+    <Compile Include="Utils\ConvertHelper.cs" />
+    <Compile Include="Utils\ProcessHelper.cs" />
+    <Compile Include="Utils\ScrapperHelper.cs" />
+    <Content Include="log4net.config" />
+    <None Include="PlayoffSchedulingService.cs" />
+    <Compile Include="PositionsRepo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SchedulingService.cs" />
+    <Compile Include="SearchService.cs" />
+    <Compile Include="SeasonsRepo.cs" />
+    <Compile Include="SectionsRepo.cs" />
+    <Compile Include="Services\GamesService.cs" />
+    <Compile Include="Services\ScrapperService.cs" />
+    <Compile Include="SettingsRepo.cs" />
+    <Compile Include="StagesRepo.cs" />
+    <Compile Include="TeamSearchResult.cs" />
+    <Compile Include="TeamsRepo.cs" />
+    <Compile Include="UnionsRepo.cs" />
+    <Compile Include="UsersRepo.cs" />
+    <Compile Include="Utils\Globals.cs" />
+    <Compile Include="Utils\Protector.cs" />
+    <Compile Include="Utils\RoundRobin.cs" />
+    <None Include="Resources\TeamPlayerImportTemplate.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AppData\AppModel.csproj">
+      <Project>{d4520ce6-76d8-4d61-bd7e-814460f8fa3f}</Project>
+      <Name>AppModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PushServiceLib\PushServiceLib.csproj">
+      <Project>{4a86a3c6-e144-495b-bcd0-84c16559e2fd}</Project>
+      <Name>PushServiceLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="phantomjs.exe" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,25 @@
+﻿@model List<ManagedItemViewModel>
+
+<h2 class="sub-header">@ViewBag.Title</h2>
+
+<div class="row offset-2">
+    <div class="col-lg-5">
+        <table class="table table-bordered">
+            <tbody>
+                @foreach (var m in Model)
+                {
+                    <tr>
+                        <td>@m.Name</td>
+                        @if (!string.IsNullOrEmpty(@m.LeagueName))
+                        {
+                            <td>@m.LeagueName</td>
+                        }
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("Edit", m.Controller, new {id = m.Id, seasonId = m.SeasonId, currentLeagueId = m.LeagueId, clubId = m.ClubId, unionId = m.UnionId})">פרטים</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

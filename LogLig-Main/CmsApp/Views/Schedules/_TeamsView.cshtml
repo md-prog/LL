@@ -1,0 +1,11 @@
+﻿<div class="form-group col-sm-6">
+    <label class="control-label">@Messages.HomeTeam:</label>
+    @Html.DropDownList("HomeTeamId", ViewBag.TeamsList as IEnumerable<SelectListItem>,
+            new { @class = "form-control" })
+    <span id="teamerr" class="text-danger" style="display:none">@Messages.SelectOtherTeam</span>
+</div>
+<div class="form-group col-sm-6">
+    <label class="control-label">@Messages.GuestTeam:</label>
+    @Html.DropDownList("GuestTeamId", ViewBag.TeamsList as IEnumerable<SelectListItem>,
+            new { @class = "form-control" })
+</div>

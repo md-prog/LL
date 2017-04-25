@@ -1,0 +1,945 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:Resources.Messages">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.EmailExists">
+            <summary>
+              Looks up a localized string similar to אימייל כבר קיים במערכת.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.ErrorUploadingFile">
+            <summary>
+              Looks up a localized string similar to שגיאה בהעלאת קובץ.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.FacebookIdNotFound">
+            <summary>
+              Looks up a localized string similar to Facebook ID לא נמצא.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.FacebookUserNotFound">
+            <summary>
+              Looks up a localized string similar to Facebook משתמש לא נמצא.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.Final">
+            <summary>
+              Looks up a localized string similar to גמר.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.FinalNumber">
+            <summary>
+              Looks up a localized string similar to אחרונות.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.Final_Eighth">
+            <summary>
+              Looks up a localized string similar to שמינית גמר.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.InvalidLogin">
+            <summary>
+              Looks up a localized string similar to שם המשתמש או הסיסמא שגויים.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.NoFileContent">
+            <summary>
+              Looks up a localized string similar to קובץ חסר.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.PersonalIdMissing">
+            <summary>
+              Looks up a localized string similar to מספר זיהוי לא נמצא.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.Quarter_finals">
+            <summary>
+              Looks up a localized string similar to רבע גמר.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.Semifinals">
+            <summary>
+              Looks up a localized string similar to חצי גמר.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.Stage">
+            <summary>
+              Looks up a localized string similar to שלב.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.UsernameExists">
+            <summary>
+              Looks up a localized string similar to שם משתמש כבר קיים במערכת.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.UsernameOrPassMissing">
+            <summary>
+              Looks up a localized string similar to שם המששתמה או הסיסמה חסרים.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.UserNotActive">
+            <summary>
+              Looks up a localized string similar to המשתמש לא פעיל.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.UserNotExists">
+            <summary>
+              Looks up a localized string similar to המשתמש לא קיים במערכת.
+            </summary>
+        </member>
+        <member name="P:Resources.Messages.UserNotFound">
+            <summary>
+              Looks up a localized string similar to משתמש לא נמצא.
+            </summary>
+        </member>
+        <member name="T:WebApi.Controllers.ClubsController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:WebApi.Controllers.ClubsController.Get(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Get info about sepcific club by his id
+            </summary>
+            <param name="id">id of club</param>
+            <param name="unionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.ClubsController.GetAll(System.Int32,System.Int32)">
+            <summary>
+            Get list of clubs
+            <param name="id"></param>
+            <param name="seasonId"></param>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FansController.GetFanHomePage(System.Int32,System.Int32)">
+            <summary>
+            מחזיר דף הבית של אוהד בהתייחסות לקבוצה בליגה
+            </summary>
+            <param name="teamId">קבוצה ID</param>
+            <param name="leagueId">ליגה ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FansController.GetFan(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            מחזיר דף אוהד כפי שמשתמש אחר רואה אותו
+            </summary>
+            <param name="id">ID משתמש</param>
+            <param name="unionId"></param>
+            <returns></returns>
+            // GET: api/Fans/5
+        </member>
+        <member name="M:WebApi.Controllers.FansController.PutFanProfile(System.Int32,WebApi.Models.FanEditProfileBindingModel)">
+            <summary>
+            עריכת פרופיל אוהד
+            </summary>
+            <param name="id">ID אוהד</param>
+            <param name="bm">Fan Edit Profile Binding Model</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.PostRegisterFan(WebApi.Models.FanRegisterBindingModel)">
+            <summary>
+            הרשמת אוהד עם שם משתמש וסיסמה
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.PostUploadProfilePicture">
+            <summary>
+            העלאת תמונת פרופיל 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.RegisterFanFB(WebApi.Models.FBFanRegisterBindingModel)">
+            <summary>
+            הרשמת משתמש דרך פייסבוק
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.RegisterWorker(WebApi.Models.WorkerRegisterBindingModel)">
+            <summary>
+            הרשמת בעל תפקיד
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.GetUserInfo(System.Nullable{System.Int32})">
+            <summary>
+            החזרת מידע על המשתמש הנוכחי
+            </summary>
+            <param name="unionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.GetFBAccountExists(System.String)">
+            <summary>
+            מחזיר אם חשבון פייסבוק קיים במערכת
+            </summary>
+            <param name="facebookId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.GetForgotPassword(WebApi.Controllers.AccountController.UserMail)">
+            <summary>
+            שולח את הסיסימה למשתמש דרך אימייל 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.PostUpdateUser(WebApi.Models.UserDetails)">
+            <summary>
+            עדכון פרטי משתמש 
+            StartAlert תזכורת יום לפני המשחק
+            TimeChange שינוי מועד משחק
+            GameScores תוצאות משחק עם סיומו
+            GameRecords שיאים לאחר משחק
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.AccountController.GetEditUser">
+            <summary>
+            קבלת פרטי משתמש 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FriendshipController.PostFriendRequest(System.Int32)">
+            <summary>
+            שליחת הצעת חבירות
+            </summary>
+            <param name="friendId">ID משתמש</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FriendshipController.GetPendingFrienshipRequests">
+            <summary>
+            מחזיר רשימת אנשים שמחכים לאישור חבירות
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FriendshipController.PostConfirmRequest(System.Int32)">
+            <summary>
+            אישור הצעת חבירות
+            </summary>
+            <param name="friendId">ID משתמש</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FriendshipController.PostCancelFriendRequest(System.Int32)">
+            <summary>
+            בטל הצעת חבירות
+            </summary>
+            <param name="friendId">ID משתמש</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FriendshipController.PostUnfriend(System.Int32)">
+            <summary>
+            בטל חבירות
+            </summary>
+            <param name="friendId">ID משתמש</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.FriendshipController.PostRejectFriendRequest(System.Int32)">
+            <summary>
+            דחית הצעת חבירות
+            </summary>
+            <param name="friendId">ID משתמש</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.GamesController.GetGameMessages(System.Int32)">
+            <summary>
+            מחזיר קיר הודעות של משחק
+            </summary>
+            <param name="teamId">ID משחק</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.GamesController.Get(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            מחזיר דף משחק
+            </summary>
+            <param name="id">משחק ID</param>
+            <param name="unionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.GamesController.GetTeams(System.Int32)">
+            <summary>
+            מחזיר רשימת אוהדם שבאים למשחק
+            </summary>
+            <param name="gameId">ID משחק</param>
+            <returns></returns>
+            GET: api/Games/Fans/{teamId}
+        </member>
+        <member name="M:WebApi.Controllers.GamesController.EndGame(System.Int32)">
+            <summary>
+            End game by game Id
+            </summary>
+            <param name="gameId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.GamesController.SetTechnicalWin(System.Int32,System.Int32)">
+            <summary>
+            Set technical win for game
+            </summary>
+            <param name="gameId"></param>
+            <param name="teamId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.GameSetsController.GameSetsByGameId(System.Int32)">
+            <summary>
+            Reutrn game sets for gameId
+            </summary>
+            <param name="gameId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.GameSetsController.CreateGameSet(WebApi.Models.CreateGameSetViewModel)">
+            <summary>
+            Create game set
+            </summary>
+            <param name="viewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.GameSetsController.UpdateGameSet(System.Int32,WebApi.Models.CreateGameSetViewModel)">
+            <summary>
+            Update game set
+            </summary>
+            <param name="gameSetId"></param>
+            <param name="viewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.LeaugesController.GetLeague(System.Int32,System.String)">
+            <summary>
+            מחזיר דף ליגה
+            </summary>
+            <param name="id">ID ליגה</param>
+            <param name="ln"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.LeaugesController.GetLeagues(System.String)">
+            <summary>
+            מחזירת רשימת ליגות בלי קבוצות
+            </summary>
+            <param name="section">שם ענף</param>
+            <returns></returns>
+            // GET: api/Leauges/Section/{section}
+        </member>
+        <member name="M:WebApi.Controllers.LeaugesController.GetLeaguesET(System.String)">
+            <summary>
+            מחזירת רשימת ליגות בלי קבוצות
+            </summary>
+            <param name="section">שם ענף</param>
+            <returns></returns>
+            // GET: api/Leauges/Section/{section}
+        </member>
+        <member name="M:WebApi.Controllers.LeaugesController.Rank(System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <param name="ln"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.MessagesController.PostTeamMessage(WebApi.Models.TeamMessageBindingModel)">
+            <summary>
+            שולח הודעה לקיר של קבוצה
+            </summary>
+            <param name="message">הודעה</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.MessagesController.PostGameMessage(WebApi.Models.GameMessageBindingModel)">
+            <summary>
+            שולח הודעה לקיר של משחק
+            </summary>
+            <param name="message">הודעה</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.MessagesController.PostWallMessageReply(WebApi.Models.WallMessageReplyBindingModel)">
+            <summary>
+            שולח תגובה להודעה על קיר של קבוצה  או משחק
+            </summary>
+            <param name="message">הודעה</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.MessagesController.PostDeleteWallMessage(System.Int32)">
+            <summary>
+              מוחק הודעה מהקיר של קבוצה או משחק
+            </summary>
+            <param name="message">הודעה</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PlayerController.Get(System.Int32,System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Get player by id
+            </summary>
+            <param name="id"></param>
+            <param name="unionId"></param>
+            <param name="leagueId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PlayerController.GetPlayerGames(System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Get player games
+            </summary>
+            <param name="teamId"></param>
+            <param name="unionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.PlayerController.GetRankedTeams(System.Int32,System.Int32)">
+            <summary>
+            Get ranked teams
+            </summary>
+            <param name="leagueId"></param>
+            <param name="teamId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.RefereeController.Get(System.Int32,System.Int32)">
+            <summary>
+            Get referee information
+            </summary>
+            <param name="id"></param>
+            <param name="unionId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.TeamsController.GetTeamMessages(System.Int32)">
+            <summary>
+            מחזיר קיר הודעות של קבוצה
+            </summary>
+            <param name="teamId">ID קבוצה</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.TeamsController.GetTeam(System.Int32,System.Int32)">
+            <summary>
+            מחזיר דף קבוצה לפי ליגה
+            </summary>
+            <param name="teamId">ID קבוצה</param>
+            <param name="leagueId">ID ליגה</param>
+            <returns></returns>
+        </member>
+        <member name="M:WebApi.Controllers.TeamsController.GetTeams(System.String)">
+            <summary>
+            מחזיר רשימת ליגות והקבוצות מתחתם לפי שם ענף
+            </summary>
+            <param name="section">שם ענף</param>
+            <returns></returns>
+            // GET: api/Teams/Section/{section}
+        </member>
+        <member name="M:WebApi.Controllers.TeamsController.GetTeams(System.String,System.Int32)">
+            <summary>
+            מחזיר רשימת ליגות והקבוצות מתחתם לפי שם ענף
+            </summary>
+            <param name="section">שם ענף</param>
+            <param name="unionId">id of the union to determine last season</param>
+            <returns></returns>
+            // GET: api/Teams/Section/{section}
+        </member>
+        <member name="M:WebApi.Controllers.UnionController.Get(System.Int32)">
+            <summary>
+             Returns the union details, requested via HTTP GET Method with the specified id.
+            </summary>
+            <param name="id">The id of the union to retrieve it's details.</param>
+            <returns></returns>
+            // GET: api/union/{union id}
+        </member>
+        <member name="M:WebApi.Controllers.UnionController.GetLeagues(System.Int32)">
+            <summary>
+             Returns the list of Eilat Tournament PDFs details, requested via HTTP GET Method
+            </summary>
+            <param name="id">The id of the union to retrieve it's details.</param>
+            <returns>["file url 1 or null", "file url 2 or null", "file url 3 or null", "file url 4 or null"]</returns>
+            // GET: api/union/leagues/{union id}
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
+            </summary>
+            <param name="description">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The ID as a string.</returns>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.HelpPageConfig">
+            <summary>
+            Use this class to customize the Help Page.
+            For example you can set a custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> to supply the documentation
+            or you can provide the samples for the requests/responses.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.Controllers.HelpController">
+            <summary>
+            The controller that will handle requests for the help page.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetDocumentationProvider(System.Web.Http.HttpConfiguration,System.Web.Http.Description.IDocumentationProvider)">
+            <summary>
+            Sets the documentation provider for help page.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="documentationProvider">The documentation provider.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleObjects(System.Web.Http.HttpConfiguration,System.Collections.Generic.IDictionary{System.Type,System.Object})">
+            <summary>
+            Sets the objects that will be used by the formatters to produce sample requests/responses.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleObjects">The sample objects.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type and action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleRequest(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample request directly for the specified media type and action with parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample request.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String)">
+            <summary>
+            Sets the sample request directly for the specified media type of the action.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleResponse(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.String,System.String,System.String[])">
+            <summary>
+            Sets the sample response directly for the specified media type of the action with specific parameters.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample response.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForMediaType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Sets the sample directly for all actions with the specified media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetSampleForType(System.Web.Http.HttpConfiguration,System.Object,System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Sets the sample directly for all actions with the specified type and media type.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sample">The sample.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The parameter type or return type of an action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualRequestType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate request samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String)">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetActualResponseType(System.Web.Http.HttpConfiguration,System.Type,System.String,System.String,System.String[])">
+            <summary>
+            Specifies the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> returned as part of the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            The help page will use this information to produce more accurate response samples.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="type">The type.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <returns>The help page sample generator.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.SetHelpPageSampleGenerator(System.Web.Http.HttpConfiguration,WebApi.Areas.HelpPage.HelpPageSampleGenerator)">
+            <summary>
+            Sets the help page sample generator.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="sampleGenerator">The help page sample generator.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetModelDescriptionGenerator(System.Web.Http.HttpConfiguration)">
+            <summary>
+            Gets the model description generator.
+            </summary>
+            <param name="config">The configuration.</param>
+            <returns>The <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator"/></returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageConfigurationExtensions.GetHelpPageApiModel(System.Web.Http.HttpConfiguration,System.String)">
+            <summary>
+            Gets the model that represents an API displayed on the help page. The model is initialized on the first call and cached for subsequent calls.
+            </summary>
+            <param name="config">The <see cref="T:System.Web.Http.HttpConfiguration"/>.</param>
+            <param name="apiDescriptionId">The <see cref="T:System.Web.Http.Description.ApiDescription"/> ID.</param>
+            <returns>
+            An <see cref="T:WebApi.Areas.HelpPage.Models.HelpPageApiModel"/>
+            </returns>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescription">
+            <summary>
+            Describes a type model.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescriptionGenerator">
+            <summary>
+            Generates model descriptions for given types.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelNameAttribute">
+            <summary>
+            Use this attribute to change the name of the <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> generated for a type.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.Models.HelpPageApiModel">
+            <summary>
+            The model that represents an API displayed on the help page.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.Models.HelpPageApiModel.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebApi.Areas.HelpPage.Models.HelpPageApiModel"/> class.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription">
+            <summary>
+            Gets or sets the <see cref="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ApiDescription"/> that describes the API.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.UriParameters">
+            <summary>
+            Gets or sets the <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ParameterDescription"/> collection that describes the URI parameters for the API.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.RequestDocumentation">
+            <summary>
+            Gets or sets the documentation for the request.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.RequestModelDescription">
+            <summary>
+            Gets or sets the <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the request body.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.RequestBodyParameters">
+            <summary>
+            Gets the request body parameter descriptions.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ResourceDescription">
+            <summary>
+            Gets or sets the <see cref="T:WebApi.Areas.HelpPage.ModelDescriptions.ModelDescription"/> that describes the resource.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ResourceProperties">
+            <summary>
+            Gets the resource property descriptions.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.SampleRequests">
+            <summary>
+            Gets the sample requests associated with the API.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.SampleResponses">
+            <summary>
+            Gets the sample responses associated with the API.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.Models.HelpPageApiModel.ErrorMessages">
+            <summary>
+            Gets the error messages associated with this model.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.HelpPageSampleGenerator">
+            <summary>
+            This class will generate the samples for the help page.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleGenerator"/> class.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ActualHttpMessageTypes">
+            <summary>
+            Gets CLR types that are used as the content of <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/>.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples">
+            <summary>
+            Gets the objects that are used directly as samples for certain actions.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects">
+            <summary>
+            Gets the objects that are serialized as samples by the supported formatters.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories">
+            <summary>
+            Gets factories for the objects that the supported formatters will serialize as samples. Processed in order,
+            stopping when the factory successfully returns a non-<see langref="null"/> object.
+            </summary>
+            <remarks>
+            Collection includes just <see cref="M:WebApi.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)"/> initially. Use
+            <code>SampleObjectFactories.Insert(0, func)</code> to provide an override and
+            <code>SampleObjectFactories.Add(func)</code> to provide a fallback.</remarks>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleRequests(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the request body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleResponses(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Gets the response body samples for a given <see cref="T:System.Web.Http.Description.ApiDescription"/>.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetSample(System.Web.Http.Description.ApiDescription,WebApi.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Gets the request or response body samples.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The samples keyed by media type.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetActionSample(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.Type,System.Net.Http.Formatting.MediaTypeFormatter,System.Net.Http.Headers.MediaTypeHeaderValue,WebApi.Areas.HelpPage.SampleDirection)">
+            <summary>
+            Search for samples that are provided directly through <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ActionSamples"/>.
+            </summary>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="type">The CLR type.</param>
+            <param name="formatter">The formatter.</param>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or for a response.</param>
+            <returns>The sample that matches the parameters.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.GetSampleObject(System.Type)">
+            <summary>
+            Gets the sample object that will be serialized by the formatters. 
+            First, it will look at the <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjects"/>. If no sample object is found, it will try to create
+            one using <see cref="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.DefaultSampleObjectFactory(WebApi.Areas.HelpPage.HelpPageSampleGenerator,System.Type)"/> (which wraps an <see cref="T:WebApi.Areas.HelpPage.ObjectGenerator"/>) and other
+            factories in <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleGenerator.SampleObjectFactories"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>The sample object.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ResolveHttpRequestMessageType(System.Web.Http.Description.ApiDescription)">
+            <summary>
+            Resolves the actual type of <see cref="T:System.Net.Http.ObjectContent`1"/> passed to the <see cref="T:System.Net.Http.HttpRequestMessage"/> in an action.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <returns>The type.</returns>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.ResolveType(System.Web.Http.Description.ApiDescription,System.String,System.String,System.Collections.Generic.IEnumerable{System.String},WebApi.Areas.HelpPage.SampleDirection,System.Collections.ObjectModel.Collection{System.Net.Http.Formatting.MediaTypeFormatter}@)">
+            <summary>
+            Resolves the type of the action parameter or return value when <see cref="T:System.Net.Http.HttpRequestMessage"/> or <see cref="T:System.Net.Http.HttpResponseMessage"/> is used.
+            </summary>
+            <param name="api">The <see cref="T:System.Web.Http.Description.ApiDescription"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+            <param name="sampleDirection">The value indicating whether the sample is for a request or a response.</param>
+            <param name="formatters">The formatters.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleGenerator.WriteSampleObjectUsingFormatter(System.Net.Http.Formatting.MediaTypeFormatter,System.Object,System.Type,System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Writes the sample object using formatter.
+            </summary>
+            <param name="formatter">The formatter.</param>
+            <param name="value">The value.</param>
+            <param name="type">The type.</param>
+            <param name="mediaType">Type of the media.</param>
+            <returns></returns>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.HelpPageSampleKey">
+            <summary>
+            This is used to identify the place where the sample should be applied.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue)">
+            <summary>
+            Creates a new <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,System.Type)">
+            <summary>
+            Creates a new <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type and CLR type.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="type">The CLR type.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleKey.#ctor(WebApi.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleKey"/> based on <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="sampleDirection">The <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.HelpPageSampleKey.#ctor(System.Net.Http.Headers.MediaTypeHeaderValue,WebApi.Areas.HelpPage.SampleDirection,System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Creates a new <see cref="T:WebApi.Areas.HelpPage.HelpPageSampleKey"/> based on media type, <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>, controller name, action name and parameter names.
+            </summary>
+            <param name="mediaType">The media type.</param>
+            <param name="sampleDirection">The <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.</param>
+            <param name="controllerName">Name of the controller.</param>
+            <param name="actionName">Name of the action.</param>
+            <param name="parameterNames">The parameter names.</param>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.ControllerName">
+            <summary>
+            Gets the name of the controller.
+            </summary>
+            <value>
+            The name of the controller.
+            </value>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.ActionName">
+            <summary>
+            Gets the name of the action.
+            </summary>
+            <value>
+            The name of the action.
+            </value>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.MediaType">
+            <summary>
+            Gets the media type.
+            </summary>
+            <value>
+            The media type.
+            </value>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.ParameterNames">
+            <summary>
+            Gets the parameter names.
+            </summary>
+        </member>
+        <member name="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection">
+            <summary>
+            Gets the <see cref="P:WebApi.Areas.HelpPage.HelpPageSampleKey.SampleDirection"/>.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ImageSample">
+            <summary>
+            This represents an image sample on the help page. There's a display template named ImageSample associated with this class.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.ImageSample.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebApi.Areas.HelpPage.ImageSample"/> class.
+            </summary>
+            <param name="src">The URL of an image.</param>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.InvalidSample">
+            <summary>
+            This represents an invalid sample on the help page. There's a display template named InvalidSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.ObjectGenerator">
+            <summary>
+            This class will create an object of a given type and populate it with sample data.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.ObjectGenerator.GenerateObject(System.Type)">
+            <summary>
+            Generates an object for a given type. The type needs to be public, have a public default constructor and settable public properties/fields. Currently it supports the following types:
+            Simple types: <see cref="T:System.Int32"/>, <see cref="T:System.String"/>, <see cref="T:System.Enum"/>, <see cref="T:System.DateTime"/>, <see cref="T:System.Uri"/>, etc.
+            Complex types: POCO types.
+            Nullables: <see cref="T:System.Nullable`1"/>.
+            Arrays: arrays of simple types or complex types.
+            Key value pairs: <see cref="T:System.Collections.Generic.KeyValuePair`2"/>
+            Tuples: <see cref="T:System.Tuple`1"/>, <see cref="T:System.Tuple`2"/>, etc
+            Dictionaries: <see cref="T:System.Collections.Generic.IDictionary`2"/> or anything deriving from <see cref="T:System.Collections.Generic.IDictionary`2"/>.
+            Collections: <see cref="T:System.Collections.Generic.IList`1"/>, <see cref="T:System.Collections.Generic.IEnumerable`1"/>, <see cref="T:System.Collections.Generic.ICollection`1"/>, <see cref="T:System.Collections.IList"/>, <see cref="T:System.Collections.IEnumerable"/>, <see cref="T:System.Collections.ICollection"/> or anything deriving from <see cref="T:System.Collections.Generic.ICollection`1"/> or <see cref="T:System.Collections.IList"/>.
+            Queryables: <see cref="T:System.Linq.IQueryable"/>, <see cref="T:System.Linq.IQueryable`1"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns>An object of the given type.</returns>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.SampleDirection">
+            <summary>
+            Indicates whether the sample is used for request or response
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.TextSample">
+            <summary>
+            This represents a preformatted text sample on the help page. There's a display template named TextSample associated with this class.
+            </summary>
+        </member>
+        <member name="T:WebApi.Areas.HelpPage.XmlDocumentationProvider">
+            <summary>
+            A custom <see cref="T:System.Web.Http.Description.IDocumentationProvider"/> that reads the API documentation from an XML documentation file.
+            </summary>
+        </member>
+        <member name="M:WebApi.Areas.HelpPage.XmlDocumentationProvider.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WebApi.Areas.HelpPage.XmlDocumentationProvider"/> class.
+            </summary>
+            <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="M:WebApi.Services.FriendsService.GetAllFanFriends(System.Int32,System.Int32)">
+            Get all friends of a user, along with Friendship status with the currently authenticated user
+        </member>
+    </members>
+</doc>

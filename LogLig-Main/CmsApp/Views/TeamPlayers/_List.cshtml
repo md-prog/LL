@@ -1,0 +1,92 @@
+﻿@model IList<DataService.TeamPlayerItem>
+@{
+    int savedId = TempData["SavedId"] != null ? (int)TempData["SavedId"] : 0;
+    int errorId = TempData["ErrorId"] != null ? (int)TempData["ErrorId"] : 0;
+}
+<input type="hidden" id="seasonid" value="@ViewBag.SeasonId" />
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Messages.Name</th>
+            <th>@Messages.Shirt</th>
+            <th>@Messages.Position</th>
+            <th>@Messages.IdentNum</th>
+            <th>@Messages.Active</th>
+            @if (User.IsInAnyRole(AppRole.Workers, AppRole.Admins) && ViewBag.JobRole != JobRole.TeamManager)
+            {
+            <th>@Messages.MovePlayer</th> }
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            string formId = $"teamplform{u.Id}";
+            string shirtNumId = $"shirtNum_{u.Id}";
+            var posList = new SelectList(ViewBag.Positions, "PosId", "Title", u.PosId);
+            <tr>
+                <td>@u.UserId</td>
+                <td>
+                    @if (((int?)ViewBag.LeagueId).HasValue)
+                    {
+                        <a href="@Url.Action("Edit", "Players", new {id = u.UserId, seasonId = u.SeasonId, leagueId = ViewBag.LeagueId, teamId = u.TeamId})">@u.FullName</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Edit", "Players", new {id = u.UserId, seasonId = u.SeasonId, clubId = ViewBag.ClubId, teamId = u.TeamId})">@u.FullName</a>
+                    }
+                    
+                </td>
+                <td class="col-sm-2">
+                    <input id="@shirtNumId" name="ShirtNum" value="@u.ShirtNum" class="form-control" form="@formId" />
+                </td>
+                <td>
+                    @Html.DropDownList("PosId", posList, Messages.Select, new { @class = "form-control", form = formId, id = "pos" + u.Id })
+                </td>
+                <td>
+                    @u.IdentNum
+            </td>
+
+                <td>
+                    @Html.CheckBox("IsActive", u.IsActive, new { @form = formId })
+                </td>
+                @if (User.IsInAnyRole(AppRole.Workers, AppRole.Admins) && ViewBag.JobRole != JobRole.TeamManager)
+                {
+                    <td>
+                        <input type="checkbox" name="moveplayer" value="@u.UserId"/>
+                    </td>
+                }
+
+                <td class="text-left">
+                    <input type="hidden" name="UpdateId" value="@u.Id" form="@formId" />
+                    <input type="hidden" name="TeamId" value="@u.TeamId" form="@formId"/>
+                    <form id="@formId" method="post" action="@Url.Action("Update", new {seasonId = u.SeasonId})" 
+                          data-ajax="true"
+                          data-ajax-mode="replace"
+                          data-ajax-failure="tpList.playerUpdateFailure"
+                          data-ajax-update="#tplist"></form>
+                    @if (savedId == u.Id)
+                    {
+                        <i class="glyphicon glyphicon-ok text-success"></i>
+                    }
+
+                    @if (errorId == u.Id)
+                    {
+                        <i class="glyphicon glyphicon-exclamation-sign text-danger"></i>
+                    }
+                    <button class="btn btn-primary" form="@formId">@Messages.Save</button>
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete", new { id = u.Id, seasonId = u.SeasonId })" class="@AppCss.Delete"
+                       data-ajax-confirm="@Messages.DeleteConfirm"
+                       data-ajax-update="#playersedit"
+                       data-ajax="true"></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript" src="~/Scripts/pages/tpList.js"></script>

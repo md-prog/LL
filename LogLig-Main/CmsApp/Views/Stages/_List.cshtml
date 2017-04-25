@@ -1,0 +1,27 @@
+﻿@model IList<AppModel.Stage>
+
+<table class="table table-bordered">
+    <tbody>
+        @{ int i = 1; foreach (var s in Model)
+         {
+            <tr>
+                <td>@Messages.Stage @s.Number</td>
+                <td width="165">
+                    <a href="@Url.Action("Create", "Groups", new { id = s.StageId, seasonId = ViewBag.SeasonId })" 
+                       data-target="#groupsedit" 
+                       data-toggle="modal" 
+                       class="btn btn-primary">@Messages.AddGroup</a>
+
+                    @if (i++ == Model.Count)
+                    {
+                        <a href="@Url.Action("Delete", new { id = s.StageId, seasonId = ViewBag.SeasonId })" class="@AppCss.Delete"
+                           data-ajax-confirm="@Messages.DeleteConfirm"
+                           data-ajax-update="#stages"
+                           data-ajax="true"></a>
+                    }
+                    </td>
+                </tr>
+         } }
+    </tbody>
+</table>
+

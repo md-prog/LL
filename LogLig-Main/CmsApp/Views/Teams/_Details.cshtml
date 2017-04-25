@@ -1,0 +1,141 @@
+﻿@using AppModel
+@model TeamInfoForm
+
+<form id="detailsform" method="post" data-targetid="details" action="@Url.Action("Details", "Teams")" autocomplete="off" enctype="multipart/form-data">
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+    <div class="row">
+        <div class="col-sm-6 form-group">
+            <label class="control-label">@Messages.Name:</label>
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Title)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 form-group">
+            <label class="control-label">@Messages.Logo:</label> (<span>2mb</span>)
+
+            <table>
+                <tr>
+                    <td width="100px">
+                        @Html.Editor("LogoFile", "ImageUpload")
+                    </td>
+                    <td width="10px"></td>
+                    <td>
+                        <a class="btn btn-sm btn-danger"
+                           href="@Url.Action("DeleteImage", new {leagueId = Model.LeagueId, teamId = Model.TeamId, seasonId = Model.SeasonId, image = "Logo"})"
+                           title="@Messages.Delete">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            @Html.ValidationMessage("LogoFile")
+            @if (!string.IsNullOrEmpty(Model.Logo))
+            {
+            <div class="offset-2"></div>
+            @ShowImage(Model.Logo)
+            }
+        </div>
+        <div class="col-sm-3 form-group">
+            <label class="control-label">@Messages.PersonnelImage:</label> (<span>2mb</span>)
+
+            <table>
+                <tr>
+                    <td width="100px">
+                        @Html.Editor("ImageFile", "ImageUpload")
+                    </td>
+                    <td width="10px"></td>
+                    <td>
+                        <a class="btn btn-sm btn-danger"
+                           href="@Url.Action("DeleteImage", new {leagueId = Model.LeagueId, teamId = Model.TeamId, seasonId = Model.SeasonId , image = "Image"})"
+                           title="@Messages.Delete">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            @Html.ValidationMessage("ImageFile")
+            @if (!string.IsNullOrEmpty(Model.PersonnelPic))
+            {
+            <div class="offset-2"></div>
+            @ShowImage(Model.PersonnelPic)
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-success">0%</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2 form-group">
+            <label class="control-label">@Messages.UnderAdult</label>
+            <select class="form-control" name="IsUnderAdult">
+                <option value="" @(!Model.IsUnderAdult.HasValue ? "selected" : "")>@Messages.Select</option>
+                <option value="true" @(Model.IsUnderAdult ?? false ? "selected" : "")>@Messages.Yes</option>
+                <option value="false" @(!(Model.IsUnderAdult ?? true) ? "selected" : "")>@Messages.No</option>
+            </select>
+        </div>
+        <div class="col-sm-2 form-group">
+            <label class="control-label">@Messages.IsReserved</label>
+            <select class="form-control" name="IsReserved">
+                <option value="" @(!Model.IsReserved.HasValue ? "selected" : "")>@Messages.Select</option>
+                <option value="true" @(Model.IsReserved ?? false ? "selected" : "")>@Messages.Yes</option>
+                <option value="false" @(!(Model.IsReserved ?? true) ? "selected" : "")>@Messages.No</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            @if (TempData["Saved"] != null)
+            {
+            <span class="text-success">@Messages.DataSavedSuccess</span>
+            }
+        </div>
+        <div class="col-sm-2 form-group text-align">
+            <button class="btn btn-primary">@Messages.Save</button>
+        </div>
+    </div>
+    }
+    else
+    {
+    <div class="row">
+        <div class="col-sm-6 form-group">
+            <h3>@Model.Title</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 form-group">
+            @if (!string.IsNullOrEmpty(Model.Logo))
+            {
+            <div class="offset-2"></div>
+            @ShowImage(Model.Logo)
+            }
+        </div>
+        <div class="col-sm-3 form-group">
+            @if (!string.IsNullOrEmpty(Model.PersonnelPic))
+            {
+            <div class="offset-2"></div>
+            @ShowImage(Model.PersonnelPic)
+            }
+        </div>
+    </div>
+    }
+    @Html.HiddenFor(m => m.TeamId)
+    @Html.Hidden(nameof(League.LeagueId), Model.leagues.Count > 0 ? (int?)Model.leagues.First().Id : null)
+    @Html.HiddenFor(m=>m.SeasonId)
+    @Html.Hidden(nameof(Club.ClubId), Model.clubs.Count > 0 ? (int?)Model.clubs.First().Id : null)
+</form>
+
+@helper ShowImage(string imgName)
+{
+    <img class="img-responsive img-thumbnail" src="@( GlobVars.ContentPath + "/teams/" + imgName)" />
+}
+
+<script>
+    setFileUpload('#detailsform', '#details');
+</script>

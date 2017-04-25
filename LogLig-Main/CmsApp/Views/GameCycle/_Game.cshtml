@@ -1,0 +1,47 @@
+﻿@model AppModel.GamesCycle
+
+@{
+    var auditoriums = new SelectList(ViewBag.Auditoriums, "AuditoriumId", "Name", Model.AuditoriumId);
+    var referees = new SelectList(ViewBag.Referees, "UserId", "FullName", Model.RefereeId);
+    int savedId = TempData["SavedId"] != null ? (int)TempData["SavedId"] : 0;
+}
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@Html.HiddenFor(model => model.CycleId)
+
+<div class="col-sm-12">
+    <div id="backgroundgrey">
+        <div class="row">
+            <div class="col-sm-2">
+                <label class="control-label">@Messages.Auditorium:</label>
+            </div>
+            <div class="col-sm-2">
+                <label class="control-label">@Messages.Referee:</label>
+            </div>
+            <div class="col-sm-2">
+                <label class="control-label">@Messages.Date:</label>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-2">
+                @Html.DropDownList("AuditoriumId", auditoriums, Messages.Select, new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2">
+                @Html.DropDownListFor(m => m.RefereeId, referees, Messages.Select, new { @class = "form-control" })
+            </div>
+            <div class="col-sm-2">
+                <div style="position:relative">
+                    <input name="StartDate" class="form-control frm-date" type="text" value="@Model.StartDate.ToString(Messages.DateFormat)" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <input type="submit" value="@Messages.Save" class="btn btn-sm btn-primary" />
+                @if (savedId != 0)
+            {
+                    <i class="glyphicon glyphicon-ok text-success"></i>
+                }
+            </div>
+        </div>
+    </div>
+</div>

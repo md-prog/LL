@@ -1,0 +1,94 @@
+﻿@model ClubsForm
+@{
+    int savedId = TempData["SavedId"] != null ? (int)TempData["SavedId"] : 0;
+    int errId = TempData["ErrId"] != null ? (int)TempData["ErrId"] : 0;
+}
+<table class="table table-bordered">
+    <tbody>
+        @foreach (var m in Model.Clubs)
+        {
+            string frmid = "clubsform" + m.ClubId;
+            if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors))
+            {
+                <tr>
+                    <td>
+                        @m.ClubId
+                    </td>
+                    <td>
+                        @using (Ajax.BeginForm("Update", "Clubs", new AjaxOptions { UpdateTargetId = "clubs" }, new { id = frmid }))
+                        {
+                            <span class="form-group">
+                                <input type="text" name="Name" value="@m.Name" form="@frmid" class="form-control required" maxlength="50" />
+                                @Html.ValidationMessage("Name")
+                            </span>
+                            <input type="hidden" name="ClubId" form="@frmid" value="@m.ClubId" />
+                        }
+                    </td>
+                    <td>
+                        <button class="@AppCss.Save @(savedId == m.ClubId ? "btn-success" : null) btn" form="@frmid"></button>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary"
+                           href="@Url.Action("Edit", "Clubs",
+                                new {id = m.ClubId, sectionId = m.SectionId, unionId = m.UnionId, seasonId = m.SeasonId})">
+                            @Messages.Details
+                        </a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Delete", new {id = m.ClubId})" class="@AppCss.Delete"
+                           data-ajax-confirm="@Messages.DeleteConfirm"
+                           data-ajax-update="#clubs"
+                           data-ajax="true"></a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+                        @m.ClubId
+                    </td>
+                    <td>
+                        @m.Name
+                    </td>
+                    <td>
+                        <a class="btn btn-primary"
+                           href="@Url.Action("Edit", "Clubs",
+                                new {id = m.ClubId, sectionId = m.SectionId, unionId = m.UnionId, seasonId = m.SeasonId})">
+                            @Messages.Details
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors))
+    {
+        <tfoot>
+            <tr>
+                <td></td>
+                <td>
+                    @using (Ajax.BeginForm("Save", "Clubs", new AjaxOptions { UpdateTargetId = "clubs" }, new { id = "clubsform" }))
+                    {
+                        <span class="form-group">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = Messages.AddNew, form = "clubsform", maxlength = 50 })
+                            @Html.ValidationMessageFor(m => m.Name)
+                        </span>
+                        @Html.HiddenFor(m => m.SectionId, new { form = "clubsform" })
+                        @Html.HiddenFor(m => m.UnionId,   new { form = "clubsform" })
+                        @Html.HiddenFor(m => m.SeasonId,  new { form = "clubsform" })
+                    }
+                </td>
+                <td>
+                    <button class="btn btn-primary" form="clubsform">@Messages.Save</button>
+                </td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    }
+</table>
+
+<script>
+    $('#clubsform').validateBootstrap(true);
+</script>
+

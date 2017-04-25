@@ -1,0 +1,198 @@
+﻿@model GroupsForm
+@{
+    var gameTypesList = Model.GamesTypes.Select(r => new SelectListItem
+    {
+        Value = r.Value,
+        Text = LangHelper.GetGameType(r.Text)
+    });
+
+    var pointTypesList = Model.PointsTypes.Select(r => new SelectListItem
+    {
+        Value = r.Key.ToString(),
+        Text = LangHelper.GetGameType(r.Value)
+    });
+}
+<div id="groupmodal">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+        <h4 class="modal-title">@(Model.GroupId == 0 ? Messages.AddGroup : Model.Name)</h4>
+    </div>
+
+    @using (Ajax.BeginForm("Edit", null,
+                            new AjaxOptions
+                            {
+                                UpdateTargetId = "groupmodal"
+                            },
+                            new
+                            {
+                                id = "groupform",
+                                autocomplete = "off"
+                            }))
+    {
+        <div class="modal-body">
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <label class="control-label">@Messages.GameType:</label>
+                    @Html.DropDownListFor(m => m.TypeId, gameTypesList, new { @class = "form-control", @id = "MainDropDownListID" })
+                    @Html.ValidationMessageFor(m => m.TypeId)
+                </div>
+            </div>
+            @if (!Model.FirstStage && Model.PointId != 0)
+            {
+                <div class="row" id="temp">
+                    <div class="form-group col-sm-12">
+                        <label class="control-label">@Messages.GameType:</label>
+                        @Html.DropDownListFor(m => m.PointId, pointTypesList, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.PointId)
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <label class="control-label">@Messages.GroupName:</label>
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Name)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <label class="control-label">@Messages.RoundsNumber:</label>
+                    @Html.DropDownListFor(m => m.NumberOfCycles, Model.PossibleNumberOfCycles, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.NumberOfCycles)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <label>@Messages.CommonTeamsList</label>
+                    @Html.ListBoxFor(m => m.TeamsArr,
+            new MultiSelectList(Model.TeamsList, "Value", "Text"),
+     new { @id = "allteams", style = "display:block; height:200px;", @class = "col-xs-12" })
+                </div>
+                <div class="col-xs-1 offset-8 text-center">
+                    <a href="javascript:moveSelected('allteams', 'selectedteams')" class="btn btn-primary btn-xs">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </a>
+                    <a href="javascript:moveSelected('selectedteams', 'allteams')" class="btn btn-primary btn-xs offset-2">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </a>
+                </div>
+                <div class="col-xs-5">
+                    <label>@Messages.Group</label>
+                    @Html.ListBoxFor(m => m.SelectedTeamsArr, new MultiSelectList(Model.SelectedTeamsList, "Value", "Text"), new { @id = "selectedteams", style = "display:block; height:200px;", @class = "col-xs-12" })
+                    @Html.HiddenFor(m => m.TeamsList)
+                    @Html.HiddenFor(m => m.SelectedTeamsList)
+                </div>
+                <div class="col-xs-1 offset-8 text-center">
+                    <a class="btn btn-primary btn-xs updownbtn" data-val="Up">
+                        <i class="glyphicon glyphicon-chevron-up"></i>
+                    </a>
+                    <a class="btn btn-primary btn-xs updownbtn offset-2" data-val="Down">
+                        <i class="glyphicon glyphicon-chevron-down"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="row col-xs-offset-6">
+                @Html.ValidationMessageFor(m => m.SelectedTeamsArr)
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">@Messages.Close</button>
+            <button type="submit" onclick="selectAllInSelectedList()" class="btn btn-primary">@Messages.Save</button>
+        </div>
+        @Html.HiddenFor(m => m.GroupId)
+        @Html.HiddenFor(m => m.StageId)
+        @Html.HiddenFor(m => m.LeagueId)
+        @Html.Hidden("SeasonId", (int?)ViewBag.SeasonId)
+    }
+
+    @if (TempData["LeagueId"] != null)
+    {
+        <script>
+            $('#groupsedit').modal('hide');
+            $('#groupslist').load('@Url.Action("Index", new { id = TempData["LeagueId"], seasonId= @ViewBag.SeasonId })');
+        </script>
+    }
+
+    <script>
+        $('#groupform').validateBootstrap(true);
+        IndexSelectedList();
+        function moveSelected(from, to) {
+            $('#' + from + ' option:selected').remove().appendTo('#' + to);
+            IndexSelectedList();
+        }
+
+        function selectAllInSelectedList() {
+            $("#selectedteams option").prop('selected', true);
+
+            //$("#allteams option").each(function () {
+            //    var item = {}
+            //    item.Value = $(this).val()
+            //    item.Text = $(this).html()
+            //    $(this).attr("selected", "selected");
+            //});
+        }
+
+
+        $('.updownbtn').click(function () {
+            var $op = $('#selectedteams option:selected'),
+                $this = $(this);
+            if ($op.length) {
+                ($this.data('val') == 'Up') ?
+                    $op.first().prev().before($op) :
+                    $op.last().next().after($op);
+                IndexSelectedList();
+            }
+        });
+
+        function IndexSelectedList() {
+            var selectedlist = $('#selectedteams option');
+            for (var i = 0; i < selectedlist.length; i++) {
+                var element = $(selectedlist[i]);
+                var index = i + 1;
+                var clearText = removeIndexFromElement(element);
+                element.text(clearText);
+                element.attr("index", index + " ");
+                element.text(element.attr("index") + element.text());
+            }
+
+            var allList = $('#allteams option');
+            for (var i = 0; i < allList.length; i++) {
+                var element = $(allList[i]);
+                var clearText = removeIndexFromElement(element);
+                element.text(clearText);
+                element.attr("index", null);
+                element.text(clearText);
+            }
+        }
+
+        function removeIndexFromElement(element) {
+            var elementText = element.text();
+            if (element.attr("index")) {
+                var txtIndex = elementText.indexOf(element.attr("index"));
+                var txtLength = element.attr("index").length;
+                elementText = elementText.replace(elementText.substring(txtIndex, txtLength), "");
+            }
+            return elementText;
+        }
+
+        $('#MainDropDownListID').change(function () {
+            console.log('event');
+            var SelectedValue = $(this).val();
+            console.log($(this).val());
+            if (SelectedValue != 1) {
+                document.getElementById('temp').style.visibility = 'hidden';
+            }
+            else {
+                document.getElementById('temp').style.visibility = 'visible';
+            }
+
+        });
+
+
+
+
+
+    </script>
+</div>

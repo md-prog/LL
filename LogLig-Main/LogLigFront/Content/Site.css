@@ -1,0 +1,222 @@
+﻿/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding: 15px;
+    width: 940px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.modal-sm {
+    max-width: 400px;
+}
+
+.tableRank {
+    width: 940px;
+}
+
+.playOff {
+    padding-left: 30px;
+    vertical-align:central
+}
+
+.rank {
+}
+
+.main-title {
+    color: #333333;
+    font-size:14px;
+}
+
+.table-bordered tr:first-child {
+    font-weight: bold;
+}
+
+.modal-body .table-bordered tr:first-child {
+    font-weight: normal;
+}
+
+.table-bordered tr:first-child a{
+    color: #ce0058;
+}
+
+#waterpolo-basketball tr:first-child a{
+    color: #01559e;
+}
+
+#waterpolo-basketball .table-bordered > thead tr:nth-child(odd) {
+    background-color: #01559e;
+    border-color: #01559e;
+}
+
+h3.main-title{
+    font-size:20px;
+    font-weight: bold;
+}
+
+.btn.main-btn, .btn.main-btn:hover {
+    background-color: #ce0058;
+    height: 25px;
+    line-height: 12.5px;
+}
+
+.btn.main-btn:hover
+{
+    color:#000;
+}
+
+
+.res-table tbody tr td {
+    font-size: 14px;
+    vertical-align: middle;
+    line-height: 30px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border: none;
+}
+
+ a {
+    color:#333333;
+}
+
+
+.res-table tbody .img-circle {
+    width: 32px;
+    height: 32px;
+}
+
+.res-table .result {
+    color: #5C5C5C;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.league-table-rank thead {
+    background-color: #fcfcfc;
+}
+
+.league-table-rank tbody tr:hover {
+    background-color: #fddecf;
+}
+
+.rank-team-logo img {
+    width: 30px;
+    height: 30px;
+    margin-left: 20px;
+}
+
+footer .bot-title {
+    margin-top: 2px;
+    margin-right: 3px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+footer .bot-logo {
+    width: 70px;
+}
+
+.res-table .res-stat .label {
+    display: block;
+    font-size: 14px;
+    font-weight: normal;
+    padding-top: 6.25px;
+    height: 25px;
+    line-height: 12.5px;
+}
+
+.res-table .res-stat .label-danger 
+{
+    background: red;
+}
+
+
+.logo {
+    width: 50px;
+    height: 50px;
+}
+
+.res-table tr {
+    background: #ffffff;
+}
+
+
+.res-table tr:nth-child(odd)  {
+    background: #ffffff;
+}
+
+.res-table tr:nth-child(even)  {
+    background: #f6f6f6;
+}
+
+.table-bordered > tbody > tr > td, .table-bordered > thead > tr > th {
+    border: none;
+}
+
+.table-bordered > tbody > tr > td {
+    line-height: 30px;
+    height: 30px;
+}
+
+.table-bordered {
+    border: none;
+}
+
+.table-bordered > thead > tr > th {
+    
+}
+
+
+.table-bordered > thead tr:nth-child(odd) {
+    background: #ce0058;
+    color:white;
+}
+
+.table-bordered tr {
+    background: #ffffff;
+}
+
+.table-bordered tr:nth-child(odd)  {
+    background: #ffffff;
+}
+
+.table-bordered tr:nth-child(even)  {
+    background: #f6f6f6;
+}
+
+h2.main-title{
+    font-size:20px;
+    font-weight: bold;
+}
+.flip-to-ltr {
+    direction: ltr;
+}
+.table.table.extendedTable {
+    text-align: right;
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: none;
+    }
+}
+
+.text-success h4 {
+    font-weight:bold; 
+    color:#4b87cc;
+}
+
+.label-success {
+    background-color: #4b87cc;
+}

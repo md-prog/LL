@@ -1,0 +1,113 @@
+﻿@using CmsApp.Controllers
+@model EditClubViewModel
+
+
+<div class="row">
+    <div class="col-lg-9">
+        <h3 class="sub-header">
+            @{
+                if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors))
+                {
+                    if (Model.SectionId.HasValue)
+                    {
+            <a href="@Url.Action(nameof(SectionsController.Edit), "Sections", new { id = Model.SectionId })">@Model.SectionName</a>
+                    } else
+	                {
+            <a href="@Url.Action(nameof(UnionsController.Edit), "Unions", new { id = Model.UnionId })">@Model.UnionName</a>
+	                }
+                }
+                else
+                {
+            <span>Clubs</span>
+                }
+            }
+            &raquo; @Model.Name
+        </h3>
+    </div>
+    <div class="col-lg-3">
+        <div class="form-group" style="margin-top: 20px">
+            @if (Model.SectionId.HasValue)
+                {
+            @Html.DropDownListFor(m => m.CurrentSeasonId, new SelectList(Model.Seasons, "Id", "Name"), new { @class = "form-control", @id = "ddlSeasons" })
+                } else
+	            {
+            @Html.DisplayFor(m => m.CurrentSeasonName)
+	            }
+        </div>
+    </div>
+</div>
+
+<ul class="nav nav-tabs" id="section_tabs" role="tablist">
+    <li class="active"><a href="#clubmain" data-toggle="tab">@Messages.ClubMainTab</a></li>
+    <li><a href="#info" data-toggle="tab">@Messages.Info</a></li>
+    <li><a href="#workers_list" data-toggle="tab">@Messages.ClubOfficialsTab</a></li>
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <li><a href="#auditoriums" data-toggle="tab">@Messages.Auditoriums</a></li>
+    }
+    <li><a href="#teams" data-toggle="tab">@Messages.Teams</a></li>
+    <li><a href="#events" data-toggle="tab">@Messages.Events</a></li>
+    <li><a href="#tournament" data-toggle="tab">@Messages.Tournaments</a></li>
+    @if (Model.SectionId.HasValue)
+    {
+        <li><a href="#seasons" data-toggle="tab">@Messages.Seasons</a></li>
+    }
+</ul>
+
+<div id="groupmodal" class="tab-content row offset-3">
+    <div class="tab-pane active in fade col-sm-9" id="clubmain">
+        @Html.Action("MainTab", new { clubId = Model.Id })
+    </div>
+
+    <div class="tab-pane fade col-sm-9" id="info">
+        @Html.Action("Details")
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="workers_list">
+        @Html.Action("WorkerList", "Jobs", new { id = Model.Id, logicalName = LogicaName.Club, seasonId = Model.CurrentSeasonId })
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="auditoriums">
+        @Html.Action("List", "Auditoriums", new { clubId = Model.Id, seasonId = Model.CurrentSeasonId })
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="teams">
+        @Html.Action("ClubTeams", "Clubs", new { clubId = Model.Id, seasonId = Model.CurrentSeasonId })
+    </div>
+
+    <div class="tab-pane" fade col-sm-7 offset-2 id="events">
+        @Html.Action("Index", "Events", new { clubId = Model.Id })
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="tournament">
+        @Html.Action("EilatTournament", "Unions", new { clubId = Model.Id, seasonId = Model.CurrentSeasonId })
+    </div>
+
+    <div class="tab-pane fade col-sm-7 offset-2" id="seasons">
+        @Html.Action("List", "Seasons", new { entityId = Model.Id, logicalName = LogicaName.Club })
+    </div>
+</div>
+
+<div class="modal fade" id="newleague" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $('#ddlSeasons').change(function () {
+            var seasonId = $(this).val();
+            $.ajax({
+                url: '/Admin/SetClubCurrentSeason',
+                type: 'POST',
+                dataType: 'JSON',
+                data: { seasonId },
+                success: function () {
+                }
+            });
+            window.location.href = '@Url.Action("Edit", new { id = Model.Id })';
+        });
+    </script>
+}

@@ -1,0 +1,8 @@
+﻿@model TeamPlayerForm
+<div class="row">
+    <div class="col-sm-10" id="tplist">
+        @Html.Action("List", new {id = Model.TeamId, seasonId = Model.SeasonId})
+    </div>
+</div>
+
+

@@ -1,0 +1,331 @@
+﻿@model PlayerFormView
+@{
+    var gendersList = Model.Genders.Select(r => new SelectListItem
+    {
+        Value = r.Value,
+        Text = LangHelper.GetGender(r.Text)
+    });
+}
+<h3 class="sub-header">
+    @{
+        int i = 0;
+        foreach (var l in Model.PlayerTeams.OrderBy(t => t.Title))
+        {
+            if (i++ > 0)
+            {<text>, </text>}
+            if (Model.IsValidUser || Model.ManagerTeams.Any(t => t.TeamId == l.TeamId))
+            {
+                if (Model.LeagueId == 0 && l.LeagueId == 0)
+                {
+                    <a href="@Url.Action("Edit", "Teams", new { id = l.TeamId,
+                            seasonId = Model.SeasonId > 0 ? Model.SeasonId : l.SeasonId,
+                            clubId = Model.ClubId > 0 ? Model.ClubId : l.ClubId })">
+                        @l.Title
+                    </a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Edit", "Teams", new { id = l.TeamId,
+                            currentLeagueId = Model.LeagueId > 0 ? Model.LeagueId : l.LeagueId,
+                            seasonId = Model.SeasonId > 0 ? Model.SeasonId : l.SeasonId})">
+                        @l.Title
+                    </a>
+                }
+            }
+            else
+            {
+                <span>@l.Title</span>
+            }
+        }
+    }
+    <span>&raquo;</span> @(Model.UserId != 0 ? Model.FullName : "הוסף שחקן")
+</h3>
+<form class="form" id="playerform" role="form" method="post" enctype="multipart/form-data">
+    <div class="row" id="backgroundgrey">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.FullName:</label>
+                    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.FullName)
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label">  <!--<input type="radio" name="Id" value="Id" checked>--> @Messages.IdentNum:</label>&nbsp&nbsp
+                    <!--      <label class="control-label"><input type="radio" name="Id" value="Passport"> @Messages.PassportNum:</label>  -->
+                    @Html.TextBoxFor(m => m.IdentNum, new { @class = "form-control custid" })
+                    @Html.ValidationMessageFor(m => m.IdentNum)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.Email:</label>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control custemail" })
+                    @Html.ValidationMessageFor(m => m.Email)
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.Password:</label>
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control pass", value = Model.Password, data_val_pass = Messages.IvalidPasswrodPattern })
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.Phone:</label>
+                    @Html.TextBoxFor(m => m.Telephone, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Telephone)
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.PlayerCardNumber:</label>
+                    @Html.TextBoxFor(m => m.IdentCard, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.IdentCard)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.Insurance:</label>
+                    @Html.CheckBoxFor(m => m.Insurance)
+                    @Html.ValidationMessageFor(m => m.Insurance)
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.MedicalCertificate:</label>
+                    @Html.CheckBoxFor(m => m.MedicalCertificate)
+                    @Html.ValidationMessageFor(m => m.MedicalCertificate)
+                </div>
+            </div>
+            @if (Model.IsHadicapEnabled)
+            {
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label class="control-label">@Messages.TestResults:</label>
+                        @Html.TextBoxFor(m => m.TestResults, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.TestResults)
+                    </div>
+                </div>
+            }
+            <!--      <div class="row">
+                      <div class="form-group col-sm-6">
+                          <label class="control-label">@Messages.InsuranceDate:</label>
+                          <div style="position: relative">
+                              <input type="text" name="EndDate" value="" class="form-control frm-date" />
+                          </div>
+                      </div>
+                       <div class="form-group col-sm-4">
+                          <label class="control-label">@Messages.InsuranceFile:</label> (<span>2mb /jpg</span>)
+                          <span class="btn btn-default btn-file">
+                              <span>צרף קובץ</span>
+                              <input type="file" name="" data-val="true" data-val-regex-pattern="^.*\.(jpg|JPG)$" data-val-regex="יש לבחור קובץ jpg" accept="image/*" autocomplete="off">
+                          </span>
+
+                          Add new code here for attaching as InsuranceFile
+                      </div>
+
+                  </div>              -->
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.BirthDay:</label>
+                    @Html.TextBoxFor(m => m.BirthDay, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.BirthDay)
+                    <div id="datetimepicker12"></div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.Heigth:</label>
+                    @Html.TextBoxFor(m => m.Height, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Height)
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.Gender:</label>
+                    @Html.DropDownListFor(m => m.GenderId, gendersList, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="control-label">@Messages.City:</label>
+                    @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+                </div>
+            </div>
+            @if (Model.IsHadicapEnabled)
+            {
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label class="control-label">@Messages.PlayereInTeamLessThan3year:</label>
+                        @Html.CheckBoxFor(m => m.IsPlayereInTeamLessThan3year)
+                        @Html.ValidationMessageFor(m => m.IsPlayereInTeamLessThan3year)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label class="control-label">@Messages.HandicapLevel:</label>
+                        @Html.TextBoxFor(m => m.HandicapLevel, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.HandicapLevel)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label class="control-label">@Messages.CalculatedReduction:</label>
+                        <label id="lblCalculatedReduction" class="control-label"></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label class="control-label">@Messages.TotalResult:</label>
+                        <label id="lblTotalResult" class="control-label"></label>
+                    </div>
+                </div>
+            }
+            <div class="row offset-3">
+                <div class="form-group text-left col-sm-12">
+                    <button class="btn btn-primary">@Messages.Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label class="control-label">@Messages.Image:</label> (<span>2mb /jpg</span>)
+                @Html.Editor("ImageFile", "ImageUpload", new { css = "validfile" })
+                @Html.ValidationMessage("ImageFile")
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    string src = GlobVars.ContentPath + "/players/" + Model.Image;
+                    <img class="img-responsive img-thumbnail" src="@src" />
+                }
+            </div>
+        </div>
+        <div class="col-sm-6">
+            @if (Model.PlayerHistories != null && Model.PlayerHistories.Count > 0)
+            {
+                <table class="table table-bordered">
+                    <caption>Player history</caption>
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>Season</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var history in Model.PlayerHistories)
+                        {
+                            <tr>
+                                <td>@history.Team</td>
+                                <td>@history.Season</td>
+                                <td>@history.Date.ToString(Messages.DateFormat)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+        </div>
+
+    </div>
+    @Html.HiddenFor(m => m.UserId)
+    @Html.HiddenFor(m => m.CurrentTeamId)
+</form>
+
+<script>
+    $(document).ready(function () {
+
+        var userHandicapLevel = '@Model.HandicapLevel';
+
+        calculateUserHandicapLevel(userHandicapLevel);
+
+        $('#HandicapLevel').on('keyup', function () {
+            var handicapLevel = $(this).val();
+
+            if (handicapLevel >= 1 && handicapLevel <= 9999) {
+                calculateUserHandicapLevel(handicapLevel);
+            } else {
+                $('#lblCalculatedReduction').text('');
+                $('#lblTotalResult').text('');
+            }
+        });
+
+        $('#GenderId').on('change', function () {
+            calculateUserHandicapLevel();
+        });
+
+        $('#IsPlayereInTeamLessThan3year').on('change', function () {
+            calculateUserHandicapLevel();
+        });
+    });
+
+    function calculateUserHandicapLevel(handicapLevel) {
+        var numberOfTeamsUserPlays = '@Model.NumberOfTeamsUserPlays';
+        var calculatedReduction = 0;
+        var totalResult;
+        var WOMAN_GENDER_ID = 0;
+
+        if (handicapLevel == undefined) {
+            totalResult = $('#HandicapLevel').val();
+        } else {
+            totalResult = handicapLevel;
+        }
+
+        function reduceHandicapPointsByUserAge() {
+            var userBirthDate = new Date($('#BirthDay').val());
+            var userAge = calculateAge(userBirthDate);
+
+            if (userAge < 19) {
+                calculatedReduction += 1;
+                totalResult -= 1;
+            } else if ((userAge >= 19 && userAge <= 24) &&
+                numberOfTeamsUserPlays < 2) {
+                calculatedReduction += 1;
+                totalResult -= 1;
+            }
+        }
+
+        function reduceHandicapPointsByUserActiveTime() {
+            var isPlayereInTeamLessThan3year = $('#IsPlayereInTeamLessThan3year').is(":checked");
+
+            if (isPlayereInTeamLessThan3year && numberOfTeamsUserPlays < 2) {
+                calculatedReduction += 1;
+                totalResult -= 1;
+            }
+        }
+
+        function reduceHandicapPointsByUserGender() {
+            var genderId = $('#GenderId').val();
+
+            if (genderId == WOMAN_GENDER_ID &&
+                numberOfTeamsUserPlays < 2) {
+                calculatedReduction += 1.5;
+                totalResult -= 1.5;
+            }
+        }
+
+        function renderUserHandicapLevel() {
+            $('#lblCalculatedReduction').text(calculatedReduction);
+            $('#lblTotalResult').text(totalResult);
+        }
+
+        reduceHandicapPointsByUserAge();
+        reduceHandicapPointsByUserActiveTime();
+        reduceHandicapPointsByUserGender();
+
+        renderUserHandicapLevel();
+    }
+
+    function calculateAge(birthday) {
+        var ageDifMs = Date.now() - birthday.getTime();
+        var ageDate = new Date(ageDifMs);
+        return Math.abs(ageDate.getUTCFullYear() - 1970);
+    }
+
+    $(function () {
+        $('#playerform').validateBootstrap(true);
+        $('#BirthDay').datetimepicker({
+            format: 'd/m/Y H:i',
+            formatTime: 'H:i',
+            formatDate: 'd/m/Y',
+            step: 15,
+            closeOnDateSelect: true,
+            onChangeDateTime: function () {
+                $(this).data("input").trigger("changedatetime.xdsoft");
+            }
+           
+        });
+    });
+</script>
+
+

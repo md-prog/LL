@@ -1,0 +1,133 @@
+﻿@model TeamPlayerForm
+@{
+    var gendersList = Model.Genders.Select(r => new SelectListItem
+    {
+        Value = r.Value,
+        Text = LangHelper.GetGender(r.Text)
+    });
+}
+
+@Html.HiddenFor(m => m.TeamId)
+@Html.HiddenFor(m => m.SeasonId)
+<div class="modal-body">
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="control-label"><!--<input type="radio" name="Id" value="Id" checked>--> @Messages.IdentNum:</label>&nbsp&nbsp
+       <!--   <label class="control-label"><input type="radio" name="Id" value="Passport"> @Messages.PassportNum:</label>  -->  
+            @Html.TextBoxFor(m => m.IdentNum, new { @class = "form-control custid" })
+            @Html.ValidationMessageFor(m => m.IdentNum)
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.FullName:</label>
+            @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.FullName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.Email:</label>
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control custemail" })
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+        @*<div class="form-group col-sm-6">
+                <label class="control-label">סיסמה:</label>
+                <input style="display:none">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control pass", value = Model.Password, data_val_pass = "8 אותיות ומספרים באנגלית עם רצף של עד 3 תווים" })
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>*@
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.Phone:</label>
+            @Html.TextBoxFor(m => m.Telephone, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Telephone)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.PlayerCardNumber:</label>
+            @Html.TextBoxFor(m => m.IdentCard, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.IdentCard)
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.ShirtNumber:</label>
+            @Html.EditorFor(m => m.ShirtNum, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(m => m.ShirtNum)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="control-label">
+                @Html.CheckBoxFor(m => m.Insurance) @Messages.Insurance
+            </label>
+            @Html.ValidationMessageFor(m => m.Insurance)
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="control-label">
+                @Html.CheckBoxFor(m => m.MedicalCertificate) @Messages.MedicalCertificate
+            </label>
+            @Html.ValidationMessageFor(m => m.MedicalCertificate)
+        </div>
+        @if (Model.IsHadicapEnabled)
+        {
+            <div class="form-group col-sm-6">
+                <label class="control-label">@Messages.TestResults:</label>
+                @Html.EditorFor(m => m.TestResults, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.TestResults)
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.BirthDay:</label>
+            @Html.TextBoxFor(m => m.BirthDay, new { @class = "form-control frm-date" })
+            @Html.ValidationMessageFor(m => m.BirthDay)
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.Heigth:</label>
+            @Html.TextBoxFor(m => m.Height, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Height)
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.Gender:</label>
+            @Html.DropDownListFor(m => m.GenderId, gendersList, new { @class = "form-control" })
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.City:</label>
+            @Html.TextBoxFor(m => m.City, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-sm-6">
+            <label class="control-label">@Messages.Position:</label>
+            @Html.DropDownListFor(m => m.PosId, Model.Positions, Messages.Select, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.PosId)
+        </div>
+        <div class="form-group col-sm-6">
+            <label class="control-label"></label>
+            <div class="form-group">
+                <label class="control-label offset-2">
+                    @Html.CheckBoxFor(m => m.IsActive, new { @checked = true })  @Messages.Active:
+                </label>
+                @Html.ValidationMessageFor(m => m.IsActive)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function() {
+        $(".frm-date").datetimepicker({
+            format: 'd/m/Y H:i',
+            formatTime: 'H:i',
+            formatDate: 'd/m/Y',
+            step: 15,
+            closeOnDateSelect: true,
+            onChangeDateTime: function () {
+                $(this).data("input").trigger("changedatetime.xdsoft");
+            },
+            startDate: new Date
+        });
+
+    });
+</script>

@@ -1,0 +1,214 @@
+﻿@using Resources
+@using DataService
+@model SchedulesDto
+@{
+    bool isMonthSet = false;
+    var resList = Model.GameCycles.GroupBy(t => t.StageName).Select(t => new
+    {
+        Num = t.Key,
+        Items = t.ToList()
+    }).ToList();
+    EventDto evnt = null;
+}
+<a href="#" id="print" class="btn btn-info remove_print" style="float:left;">
+    <i class="glyphicon glyphicon-print"></i>&nbsp @Messages.Print
+</a>
+@if (ViewBag.Leagues != null)
+{
+    IEnumerable<SelectListItem> list = ViewBag.Leagues;
+
+    using (Html.BeginForm("TeamSchedules", "LeagueTable", new { id = ViewBag.TeamId, leagueId = ViewBag.LeagueId, seasonId = ViewBag.SeasonId }, FormMethod.Post, new {@class="remove_print"}))
+    {
+        @Html.DropDownList("leagueId", list, new { @class = "form-control combo", onchange = "this.form.submit();" });
+    }
+}
+
+<h3 class="main-title">
+    @if (ViewBag.Logo != null && !string.IsNullOrEmpty(ViewBag.Logo))
+    {
+        <img src="@ViewBag.Logo" class="img-circle logo" alt="" />
+    }
+    @ViewBag.ResTitle - לוח משחקים ותוצאות
+</h3>
+
+@foreach (var stage in resList)
+{
+    string maxMinStr = null;
+    var stageFirst = stage.Items.FirstOrDefault();
+    if (stageFirst != null && stageFirst.MaxPlayoffPos != null && stageFirst.MinPlayoffPos != null)
+    {
+        maxMinStr = string.Format("({0} - {1})", stageFirst.MinPlayoffPos, stageFirst.MaxPlayoffPos);
+    }
+    <h4 style="border-bottom: 1px solid #e5e6e7;">@stage.Num @maxMinStr</h4>
+    <table class="table res-table">
+        <tbody>
+            @foreach (var m in stage.Items)
+            {
+                //@m.MinPlayoffPos <br>@m.MaxPlayoffPos;
+                string elId = null;
+                if (m.StartDate.Month == DateTime.Now.Month && m.StartDate.Year == DateTime.Now.Year && !isMonthSet)
+                {
+                    isMonthSet = true;
+                    elId = "closemonth";
+                }
+                if (m.EventRef != null && m.EventRef != evnt)
+                {
+                    evnt = m.EventRef;
+                    if (!evnt.IsUsed)
+                    {
+                        evnt.IsUsed = true;
+                        <tr>
+                            <td class="res-stat remove_print" style="width: 70px;">
+                                <span class="label label-success">ארוע</span>
+                            </td>
+                            <td title="">
+                                @evnt.Place
+                            </td>
+                            <td title="Event date">@evnt.EventTime.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td class="text-center text-success" colspan="7">
+                                <h4>@evnt.Title</h4>
+                            </td>
+                        </tr>
+                    }
+                }
+                <tr id="@elId">
+                    <td class="res-stat remove_print" style="width: 70px;">
+                        @if (m.GameStatus == GameStatus.Started)
+                        {
+                            <span class="label label-success">התחיל</span>
+                        }
+                        else if (m.GameStatus == GameStatus.Ended)
+                        {
+                            <span class="label label-danger">נגמר</span>
+                        }
+                        else
+                        {
+                            <span class="label label-default">בהמתנה</span>
+                        }
+                    </td>
+                    <td title="@m.AuditoriumAddress">
+                        @if (string.IsNullOrEmpty(m.Auditorium))
+	                    {
+		                     @m.Auditorium
+                        }
+                        else
+                        {
+                            @Html.ActionLink(m.Auditorium ?? "", "AuditoriumSchedules", "LeagueTable",
+                            new { id = m.AuditoriumId, seasonId = ViewBag.SeasonId },
+                            new { @class = "btn", target = "_blank" })
+                        }
+                    </td>
+                    <td>@m.StartDate.ToString("dd/MM/yyyy HH:mm") </td>
+                    <td class="text-center">
+                        <img src="@UIHelper.GetTeamLogo(m.HomeLogo)" class="img-circle" alt="" />
+                    </td>
+                    <td class="text-center main-title">
+                        @if (m.IsHomeTeamKnown)
+                        {
+                            <h4>
+                                @Html.ActionLink(@m.HomeTeam, "TeamSchedules", "LeagueTable", new { id = @m.HomeTeamId, leagueId = ViewBag.LeagueId, seasonId = ViewBag.SeasonId }, new { @class = "main-title", target = "_blank" })
+                            </h4>
+                        }
+                        else if (m.IsRoot)
+                        {
+                            <h4>
+                                @(@m.HomeTeam)
+                            </h4>
+                        }
+                        else
+                        {
+                            if (m.Bracket != null)
+                            {
+                                <a href="@Url.Action("PotentialTeams", "LeagueTable", new { id = m.Bracket.Id, index = m.IndexInBracket % 2 == 0 ? 1 : 2 })"
+                                   data-target="#barcket-potential-teams"
+                                   data-toggle="modal"
+                                   class="main-title">@m.HomeTeam</a>
+                            }
+                        }
+                    </td>
+                    <td class="text-center result">
+                        @*<text>@m.WaterPoloHomeTeamScore</text>*@
+                        @m.HomeTeamScore
+                    </td>
+
+                    <td class="text-center result">
+                        @m.GuestTeamScore
+                        @*<text>@m.WaterPoloGuestTeamScore</text>*@
+                    </td>
+                    <td class="text-center main-title">
+                        @if (m.IsGuestTeamKnown)
+                        {
+                            <h4>
+                                @Html.ActionLink(@m.GuestTeam, "TeamSchedules", "LeagueTable", new { id = @m.GuesTeamId, leagueId = ViewBag.LeagueId, seasonId = ViewBag.SeasonId }, new { @class = "main-title", target = "_blank" })
+                            </h4>
+                        }
+                        else if (m.IsRoot)
+                        {
+                            <h4>
+                                @(@m.GuestTeam)
+                            </h4>
+                        }
+                        else
+                        {
+                            if (m.Bracket != null)
+                            {
+                                <a href="@Url.Action("PotentialTeams", "LeagueTable", new { id = m.Bracket.Id, index = m.IndexInBracket % 2 == 0 ? 2 : 1 })"
+                                   data-target="#barcket-potential-teams"
+                                   data-toggle="modal"
+                                   class="main-title">@m.GuestTeam</a>
+                            }
+                        }
+                    </td>
+                    <td class="text-center">
+                        <img src="@UIHelper.GetTeamLogo(m.GuesLogo)" class="img-circle" alt="" />
+                    </td>
+                    <td class="text-left"><a href="@Url.Action("GameSet", new { id = m.CycleId })" class="btn btn-danger main-btn" data-target="#resbox" data-toggle="modal">למשחק</a></td>
+                </tr>
+            }
+            @*Events scheduled after all games in league*@
+            @if (Model.Events != null && stage == resList.Last())
+            {
+                foreach (var ev in Model.Events.Where(e => (evnt == null || e.EventTime > evnt.EventTime) && !e.IsUsed).OrderBy(e => e.EventTime))
+                {
+                    <tr>
+                        <td class="res-stat remove_print" style="width: 70px;">
+                            <span class="label label-success">ארוע</span>
+                        </td>
+                        <td title="Event place">
+                            @ev.Place
+                        </td>
+                        <td title="Event date">@ev.EventTime.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="text-center text-success" colspan="7">
+                            <h4>@ev.Title</h4>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+    <script type="text/javascript" src="~/Scripts/App/PrintSchedule.js"></script>
+}
+
+<div class="modal fade" id="resbox" tabindex="-1" role="dialog">
+</div>
+
+@helper ShowImage(string imgName)
+{
+string imgSrc = "";
+if (!string.IsNullOrEmpty(imgName))
+{
+    imgSrc = "/assets/teams/" + imgName;
+}
+else
+{
+    imgSrc = Url.Content("~/content/img/default.png");
+}
+    <img src="@imgSrc" class="img-circle" alt="" />
+}
+
+<div class="modal fade" id="barcket-potential-teams" tabindex="-1" role="dialog">
+</div>

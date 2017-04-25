@@ -1,0 +1,98 @@
+﻿@model ClubTeamsForm
+@{
+    string msg = "";
+    if (TempData["ErrExists"] != null)
+    {
+        msg = TempData["ErrExists"] as string;
+    }
+}
+<div id="club-teams-view">
+    @using (Ajax.BeginForm("CreateClubTeam", null, new AjaxOptions {UpdateTargetId = "teams"}, new {id = "club-teams-form", autocomplete = "off"}))
+    {
+        @Html.HiddenFor(x => x.ClubId)
+        @Html.HiddenFor(x => x.CurrentSeasonId)
+        @Html.HiddenFor(m => m.TeamId)
+        @Html.HiddenFor(x=>x.SectionId)
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>@Messages.Title</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Teams)
+            {
+                <tr>
+                    <td>@item.TeamId</td>
+                    <td>@item.Title</td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Teams", new {id = item.TeamId, clubId = Model.ClubId, seasonId = Model.SeasonId})" class="btn btn-primary">@Messages.Details</a>
+                        @*<a class="btn btn-primary" href="@Url.Action("Edit", "Teams", new {id = m.TeamId, currentLeagueId = Model.LeagueId, seasonId = Model.SeasonId})">@Messages.Details</a>*@
+                    </td>
+                    <td>
+                        @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+                        {
+                            <a href="@Url.Action("DeleteTemClub", "Clubs", new {clubId = Model.ClubId, teamId = item.TeamId, seasonId = Model.SeasonId, sectionId = Model.SectionId})" class="@AppCss.Delete"
+                               data-ajax-confirm="@Messages.DeleteConfirm"
+                               data-ajax-update="#teams"
+                               data-ajax="true">
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+            <tfoot>
+            @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+            {
+                <tr>
+                    <td>
+                        <div class="form-group no-marging">
+                            @Html.CheckBoxFor(t => t.IsNew)
+                            @Html.Label(Messages.AddNewTeam)
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group no-marging">
+                            @Html.TextBoxFor(m => m.TeamName, new
+                       {
+                           @class = "form-control auto-search",
+                           @id = "team-auto-search",
+                           placeholder = Messages.AddTeam,
+                           maxlength = 50,
+                           data_remote = Url.Action("FindTeam", "Search", new { sectionId = Model.SectionId})
+                       })
+                        </div>
+                        @if (!string.IsNullOrEmpty(msg))
+                        {
+                            <div class="text-danger">@msg</div>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-primary">@Messages.Save</button>
+                    </td>
+                    <td></td>
+                </tr>
+            }
+            </tfoot>
+        </table>
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        setAutoSearch();
+
+        $('#team-auto-search').bind('typeahead:select', function (ev, data) {
+            $('[name="TeamId"]').val(data.Id);
+        });
+
+        $("#team-auto-search").keypress(function (e) {
+            if (e.which != 13 || e.which != 32) {
+                $('[name="TeamId"]').val(0);
+            }
+        });
+    });
+</script>

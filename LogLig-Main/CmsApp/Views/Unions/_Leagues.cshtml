@@ -1,0 +1,227 @@
+﻿@model TournamentsPDF
+@{
+    int errId = TempData["ErrId"] != null ? (int)TempData["ErrId"] : 0;
+}
+
+<form id="detailsform" method="post" data-targetid="Leagues" action="@Url.Action("Leagues")" autocomplete="off" enctype="multipart/form-data">
+    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+    {
+        <a href="@Url.Action("Create", "Leagues", new {unionId = Model.UnionId, clubId = Model.ClubId, et = Model.Et, seasonId = Model.SeasonId})"
+           class="btn btn-primary"
+           data-target="#newleague"
+           data-toggle="modal">
+            @if (Model.Et == TournamentsPDF.EditType.TmntSectionClub || Model.Et == TournamentsPDF.EditType.TmntUnionClub)
+            {
+                @Messages.AddTournament
+            }
+            else if (Model.Et == TournamentsPDF.EditType.LgUnion)
+            {
+                @Messages.CreateLeague
+            }
+            else if (Model.Et == TournamentsPDF.EditType.TmntUnion)
+            {
+                @Messages.CreateTournament
+            }
+        </a>
+
+
+        <a class="btn btn-info" href="@Url.Action("ExportReferees", new {id = Model.UnionId})">
+            <i href="#" class="glyphicon glyphicon-open"></i> @Messages.ExportReferees
+        </a>
+    }
+    @if (Model.Et == TournamentsPDF.EditType.TmntUnion)
+    {
+        if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+        {
+            <p>
+                @Html.HiddenFor(m => m.Pdf1)
+                @Html.HiddenFor(m => m.Pdf2)
+                @Html.HiddenFor(m => m.Pdf3)
+                @Html.HiddenFor(m => m.Pdf4)
+                @{
+                    string pdf1Hidden = Model.Pdf1 == null ? "hidden" : "";
+                    string pdf2Hidden = Model.Pdf2 == null ? "hidden" : "";
+                    string pdf3Hidden = Model.Pdf3 == null ? "hidden" : "";
+                    string pdf4Hidden = Model.Pdf4 == null ? "hidden" : "";
+                }
+                <div class="row">
+                    <div class="col-sm-3">
+                        <label for="PDF1_file" class="control-label">PDF1</label> (<span>2mb</span>)
+                        <span id="Pdf1_anchor" @pdf1Hidden>
+                            <a href="@Url.Action("ShowGlobalDoc", "Unions", new { name = Model.Pdf1 })" target="_blank">@Messages.ShowTerms</a>
+                        </span>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="PDF2_file" class="control-label">PDF2</label> (<span>2mb</span>)
+                        <span id="Pdf2_anchor" @pdf2Hidden>
+                            <a href="@Url.Action("ShowGlobalDoc", "Unions", new { name = Model.Pdf2 })" target="_blank">@Messages.ShowTerms</a>
+                        </span>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="PDF3_file" class="control-label">PDF3</label> (<span>2mb</span>)
+                        <span id="Pdf3_anchor" @pdf3Hidden>
+                            <a href="@Url.Action("ShowGlobalDoc", "Unions", new { name = Model.Pdf3 })" target="_blank">@Messages.ShowTerms</a>
+                        </span>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="PDF4_file" class="control-label">PDF4</label> (<span>2mb</span>)
+                        <span id="Pdf4_anchor" @pdf4Hidden>
+                            <a href="@Url.Action("ShowGlobalDoc", "Unions", new { name = Model.Pdf4 })" target="_blank">@Messages.ShowTerms</a>
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 form-group">
+                        <span class="btn btn-default btn-file col-sm-8">
+                            <span>@Messages.AddFile</span>
+                            <input type="file" id="PDF1_file" name="PDF1_file" data-val="true" data-val-regex-pattern="^.*\.(pdf|PDF)$" data-val-regex="@string.Format(Messages.SelectValidFile, "PDF")" accept="application/pdf" />
+                        </span>
+                        <span title="Remove file" class="btn btn-default col-sm-4" onclick="javascript:clearFile(1)">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </span>
+                        @Html.ValidationMessage("DocFile")
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <span class="btn btn-default btn-file col-sm-8">
+                            <span>@Messages.AddFile</span>
+                            <input type="file" id="PDF2_file" name="PDF2_file" data-val="true" data-val-regex-pattern="^.*\.(pdf|PDF)$" data-val-regex="@string.Format(Messages.SelectValidFile, "PDF")" accept="application/pdf" />
+                        </span>
+                        <span title="Remove file" class="btn btn-default col-sm-4" onclick="javascript:clearFile(2)">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </span>
+                        @Html.ValidationMessage("DocFile")
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <span class="btn btn-default btn-file col-sm-8">
+                            <span>@Messages.AddFile</span>
+                            <input type="file" id="PDF3_file" name="PDF3_file" data-val="true" data-val-regex-pattern="^.*\.(pdf|PDF)$" data-val-regex="@string.Format(Messages.SelectValidFile, "PDF")" accept="application/pdf" />
+                        </span>
+                        <span title="Remove file" class="btn btn-default col-sm-4" onclick="javascript:clearFile(3)">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </span>
+                        @Html.ValidationMessage("DocFile")
+                    </div>
+                    <div class="col-sm-3 form-group">
+                        <span class="btn btn-default btn-file col-sm-8">
+                            <span>@Messages.AddFile</span>
+                            <input type="file" id="PDF4_file" name="PDF4_file" data-val="true" data-val-regex-pattern="^.*\.(pdf|PDF)$" data-val-regex="@string.Format(Messages.SelectValidFile, "PDF")" accept="application/pdf" />
+                        </span>
+                        <span title="Remove file" class="btn btn-default col-sm-4" onclick="javascript:clearFile(4)">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </span>
+                        @Html.ValidationMessage("DocFile")
+                    </div>
+                </div>
+                @if (TempData["Saved"] != null)
+                {
+                <span class="text-success">@Messages.DataSavedSuccess</span>
+                }
+                <button class="btn btn-primary">@Messages.Save</button>
+                <br>
+            </p>
+                        }
+                    }
+
+    <table class="table table-bordered offset-3">
+        <thead>
+            <tr>
+                <th>@Messages.Name</th>
+                <th>@Messages.Ages</th>
+                <th>@Messages.Gender</th>
+                <th></th>
+                @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+                {
+                    <th></th>
+                }
+            </tr>
+        </thead>
+        <tbody id="sortable">
+            @foreach (var m in Model.listLeagues)
+            {
+                @Html.HiddenFor(x => x.UnionId)
+                <tr data-id="@m.LeagueId">
+                    <td>
+                        @m.Name
+                        @if (errId == m.LeagueId)
+                        {
+                            <div class="text-danger offset-1">@Messages.DeleteTeamsFirst</div>
+                        }
+                    </td>
+                    <td>@m.Age.Title</td>
+                    <td>@LangHelper.GetGender(m.Gender.TitleMany)</td>
+                    @if (User.IsInAnyRole(AppRole.Admins, AppRole.Editors, AppRole.Workers))
+                    {
+                        <td>
+                            <a class="@AppCss.Edit" href="@Url.Action("Edit", "Leagues", new {id = m.LeagueId, seasonId = m.SeasonId})"></a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("DeleteLeagues", new {id = m.LeagueId})" class="@AppCss.Delete"
+                               data-ajax-confirm="@Messages.DeleteConfirm"
+                               data-ajax-update="#leagues"
+                               data-ajax="true"></a>
+                        </td>
+                    }
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+</form>
+
+<script>
+    function activateTab(tab) {
+        $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+    };
+
+    function clearFile(num) {
+        $('#Pdf' + num).val(null);
+        $('#Pdf' + num + '_anchor').hide();
+    }
+
+    // Return a helper with preserved width of cells
+    var fixHelper = function (e, ui) {
+        ui.children().each(function () {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+
+    $(function () {
+        $('#sortable').sortable({
+            items: "tr",
+            cursor: 'move',
+            helper: fixHelper,
+            update: function (event, ui) {
+
+                var ids = [];
+                var childs = event.target.children;
+
+                $.each(childs, function (key, elem) {
+                    var id = $(elem).attr('data-id');
+                    ids.push(id);
+                });
+
+                //console.log(array);
+                var postData = {
+                    unionId: '@Model.UnionId',
+                    ids: ids,
+                    seasonId: $('#ddlSeasons').val()
+                }
+                $.ajax({
+                    url: '@Url.Action("ChangeOrder", "Unions")',
+                    data: postData,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        if (result.Success) {
+                            console.log('Order updated');
+                        } else {
+                            console.log('Order not updated');
+                        }
+                    }
+                })
+            }
+        }).disableSelection();
+    });
+</script>
